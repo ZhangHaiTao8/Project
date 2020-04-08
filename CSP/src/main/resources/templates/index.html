@@ -1,0 +1,166 @@
+<!DOCTYPE html>
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>首页 - 校园购</title>
+    <!-- Favicon icon -->
+    <link rel="shortcut icon" href="../img/favicon.ico" type="image/x-icon">
+
+    <meta name="renderer" content="webkit">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+
+    <link rel="stylesheet" href="../layui/css/layui.css" media="all">
+    <script src="../layui/layui.js" charset="utf-8"></script>
+    <style>
+        .layui-select,.layui-input{
+            height:76px;
+            padding:0px 15px 0px 15px;
+        }
+        .a{
+            font-family: 华文新魏;
+            font-size: 30px;
+        }
+        .layui-btn,.layui-btn-lg,.layui-btn-normal,.layui-btn-radius{
+            font-family: 华文新魏;
+            font-size: 30px;
+            height: 70px;
+        }
+        .title{
+            padding: 0px 0px 10px 0px;
+            font-family: 华文行楷;
+            font-size: 2rem;
+            color: #cccccc;
+        }
+        .text{
+            margin: 10px 10px 10px 10px;
+            font-family: 华文楷体;
+            font-size: 20px;
+            color: white;
+        }
+    </style>
+</head>
+
+<body>
+<div style="top: 0px;">
+    <ul class="layui-nav layui-bg-blue">
+        <li class="layui-nav-item"><img src="../img/logos/black-logo.png" height="50" alt="logo"></li>
+        <li class="layui-nav-item" style=" margin: 0px 15px 0px 15px;"><a class="a" href="">一</a></li>
+        <li class="layui-nav-item" style=" margin: 0px 15px 0px 15px;"><a class="a" href="">二</a></li>
+        <li class="layui-nav-item" style=" margin: 0px 15px 0px 15px;"><a class="a" href="">三</a></li>
+        <li class="layui-nav-item" style=" margin: 0px 15px 0px 15px;">
+            <a class="a" href="javascript:">四</a>
+            <dl class="layui-nav-child">
+                <dd><a href="">1</a></dd>
+                <dd><a href="">2</a></dd>
+                <dd><a href="">3</a></dd>
+            </dl>
+        </li>
+        <li class="layui-nav-item" style=" margin: 0px 15px 0px 15px;"><a class="a" href="">五</a></li>
+    </ul>
+    <ul class="layui-nav  layui-layout-right layui-bg-blue">
+        <li class="layui-nav-item" style=" margin: 0px 15px 0px 15px;"><a class="a" href="/enterLogin">登录</a></li>
+        <li class="layui-nav-item" style=" margin: 0px 15px 0px 15px;"><a class="a" href="/enterRegister">注册</a></li>
+    </ul>
+</div>
+
+<div style="text-align: center; top: 50px; width: 100%; height: 80%;">
+    <div class="layui-card" style="margin: 20px auto; height: 100%; width: 100%;">
+        <div class="layui-card-body" style="padding:10px 20px 15px 20px; margin: 20px; Font-size: 17px">
+            <div class="layui-form-item" style="display: flex;">
+                <p style="font-family: 华文行楷; font-size: 50px; padding: 50px 0px 30px; margin: auto;">校园购，一个追求用户满意的校园购物平台！</p>
+            </div>
+            <div class="layui-form-item" style="display: flex;">
+                <p style="font-size: 80px; padding: 50px 0px 30px; margin: auto;">Find what you need</p>
+            </div>
+            <form class="layui-form" action="" style="width: 100%; display: flex;">
+                <div class="layui-form-item" style="margin: auto; padding: 20px 0px 20px 0px">
+                    <div class="layui-inline">
+                        <input type="text" name="" placeholder="What are you looking for?" style="font-size: 30px; padding: 20px 0px; width: 400px; height: 30px; text-align: center;">
+                    </div>
+                    <div class="layui-inline" style="font-size: 23px; width: 140px; line-height: 30px; text-align: center;">
+                        <select name="">
+                            <option value="">全部分类</option>
+                            <option value="">分类1</option>
+                            <option value="">分类2</option>
+                            <option value="">分类3</option>
+                            <option value="">分类4</option>
+                            <option value="">分类5</option>
+                        </select>
+                    </div>
+                    <div class="layui-inline">
+                        <button type="button" class="layui-btn layui-btn-lg layui-btn-radius">搜索</button>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+<div class="layui-row layui-col-space10" style="padding: 30px 0px 20px 0px; display: flex; text-align: center; width: 100%; height: 50%; background-color: #2F4056">
+    <div class="layui-col-md4">
+        <img src="../img/logos/logo.png" alt="logo" style="height: 60px; padding: 0px 0px 20px 0px">
+        <div class="text">
+            <p>Campus Shopping Platform（校园购物平台）. </p>
+        </div>
+    </div>
+    <div class="layui-col-md4">
+        <h3 class="title">联系我们</h3>
+        <ul class="text">
+            <li>
+                <i class="layui-icon layui-icon-email" style="font-size: 30px;"></i>
+                <a class="text" href="mailto:12345678910@163.com">12345678910@163.com</a>
+            </li>
+            <li>
+                <i class="layui-icon layui-icon-cellphone" style="font-size: 25px;"></i>
+                <a class="text" href="tel:+86-1234-1234-123">+86 1234 1234 123</a>
+            </li>
+        </ul>
+    </div>
+    <div class="layui-col-md4">
+        <h3 class="title">快速链接</h3>
+        <ul>
+            <li>
+                <a class="text" href="">系统首页</a>
+            </li>
+            <li>
+                <a class="text" href="">系统首页</a>
+            </li>
+            <li>
+                <a class="text" href="">系统首页</a>
+            </li>
+            <li>
+                <a class="text" href="">系统首页</a>
+            </li>
+            <li>
+                <a class="text" href="">系统首页</a>
+            </li>
+        </ul>
+    </div>
+</div>
+
+<div style="display: flex; text-align: center; top: 800px; width: 100%; height: 40px;">
+    <p style="margin: auto">&nbsp;&nbsp;&nbsp;Copyright &nbsp;&nbsp;&nbsp; © 2020 &nbsp;&nbsp;&nbsp; 版权所属 &nbsp;&nbsp;&nbsp;Java2班14组</p>
+</div>
+
+<script>
+    layui.use('element', function () {
+        var element = layui.element; //导航的hover效果、二级菜单等功能，需要依赖element模块
+        //监听导航点击
+        element.on('nav(demo)', function (elem) {
+            //console.log(elem)
+            layer.msg(elem.text());
+        });
+    });
+</script>
+<script>
+    layui.use('form', function(){
+        var form = layui.form; //只有执行了这一步，部分表单元素才会自动修饰成功
+        //……
+        //但是，如果你的HTML是动态生成的，自动渲染就会失效
+        //因此你需要在相应的地方，执行下述方法来进行渲染
+        form.render();
+    });
+</script>
+</body>
+</html>

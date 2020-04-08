@@ -1,0 +1,32 @@
+spring:
+  #配置数据库信息
+  datasource:
+    url: jdbc:mysql:///csp?useSSL=false&useUnicode=true&characterEncoding=UTF-8&serverTimezone=GMT%2B8
+    username: root
+    password: root
+    driver-class-name: com.mysql.jdbc.Driver
+
+#配置thymeleaf
+thymeleaf:
+  #前缀
+  prefix: classpath:/templates/
+  #检测用户模板文件是否存在
+  check-template-location: true
+  #是否设置缓存
+  cache: false
+  #后缀
+  suffix: .html
+  #字符集编码和文件类型
+  encoding: UTF-8
+  content-type: text/html
+  #页面模式
+  mode: HTML5
+
+  #mybatis-plus配置控制台打印完整带参数sql语句
+  mybatis-plus:
+    configuration:
+      log-impl: org.apache.ibatis.logging.stdout.StdOutImpl
+    mapper-locations: classpath*:mapper/*.xml
+  #  config.location: classpath*:mybatis-config.xml
+
+

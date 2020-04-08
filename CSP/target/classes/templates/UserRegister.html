@@ -1,0 +1,20 @@
+<!DOCTYPE html>
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>用户注册</title>
+    <link rel="shortcut icon" href="../../img/favicon.ico" type="image/x-icon">
+</head>
+<body>
+    <form method="post" action="/userRegister">
+        <h2>用户注册</h2>
+        用户名：<input type="text" name="uname">
+        手机号：<input type="text" name="uphone">
+        密码：<input type="text" name="upassword">
+        邮箱：<input type="text" name="uemail">
+        <input type="submit" value="提交">
+        <br>
+        <a href="enterLogin">返回登录</a>
+    </form>
+</body>
+</html>

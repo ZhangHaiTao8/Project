@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<!--引入约束-->
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <link rel="shortcut icon" href="../static/img/favicon.ico" type="image/x-icon">
+    <script th:src="@{/static/js/jquery-3.3.1.js}"></script>
+</head>
+<body>
+    <div id="app">
+        {{message}}
+    </div>
+
+    <script th:src="@{/static/js/vue.js}"></script>
+    <script>
+        var app=new Vue({
+            el:"#app",
+            data:{
+                message:"Hello Vue"
+            }
+        })
+    </script>
+</body>
+</html>

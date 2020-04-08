@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Config 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.shisizu.dao.UserDao">
+    <select id="selectByName" resultType="com.shisizu.domain.User" parameterType="String">
+        select *
+        from user
+        where uname=#{name}
+    </select>
+
+    <!--用户登录-->
+    <select id="selectUserByExample" resultType="com.shisizu.domain.User">
+		select * from user where uphone=#{uphone} and upassword=#{upassword}
+	</select>
+
+    <!--用户注册-->
+    <insert id="userRegisterInsert" parameterType="com.shisizu.domain.User">
+		insert
+		into user(uname,upassword,uphone,uemail)
+		values(#{uname},#{upassword},#{uphone},#{uemail})
+	</insert>
+</mapper>
