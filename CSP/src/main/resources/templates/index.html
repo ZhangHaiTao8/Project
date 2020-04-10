@@ -4,37 +4,39 @@
     <meta charset="UTF-8">
     <title>首页 - 校园购</title>
     <!-- Favicon icon -->
-    <link rel="shortcut icon" href="../img/favicon.ico" type="image/x-icon">
+    <link rel="shortcut icon" th:href="@{/img/favicon.ico}" type="image/x-icon">
 
     <meta name="renderer" content="webkit">
     <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
 
-    <link rel="stylesheet" href="../layui/css/layui.css" media="all">
-    <script src="../layui/layui.js" charset="utf-8"></script>
+    <link rel="stylesheet" th:href="@{/layui/css/layui.css}" media="all">
+    <script th:src="@{/layui/layui.js}" charset="utf-8"></script>
+
+    <script th:src="@{/js/jquery-3.3.1.js}"></script>
     <style>
         .layui-select,.layui-input{
             height:76px;
-            padding:0px 15px 0px 15px;
+            padding:0 15px 0 15px;
         }
         .a{
-            font-family: 华文新魏;
+            font-family: 华文新魏,sans-serif;
             font-size: 30px;
         }
         .layui-btn,.layui-btn-lg,.layui-btn-normal,.layui-btn-radius{
-            font-family: 华文新魏;
+            font-family: 华文新魏,sans-serif;
             font-size: 30px;
             height: 70px;
         }
         .title{
-            padding: 0px 0px 10px 0px;
-            font-family: 华文行楷;
+            padding: 0 0 10px 0;
+            font-family: 华文行楷,sans-serif;
             font-size: 2rem;
             color: #cccccc;
         }
         .text{
             margin: 10px 10px 10px 10px;
-            font-family: 华文楷体;
+            font-family: 华文楷体,sans-serif;
             font-size: 20px;
             color: white;
         }
@@ -42,13 +44,14 @@
 </head>
 
 <body>
-<div style="top: 0px;">
+<!--顶部导航栏-->
+<div style="top: 0; position: fixed; width: 100%;  z-index: 10;">
     <ul class="layui-nav layui-bg-blue">
-        <li class="layui-nav-item"><img src="../img/logos/black-logo.png" height="50" alt="logo"></li>
-        <li class="layui-nav-item" style=" margin: 0px 15px 0px 15px;"><a class="a" href="">一</a></li>
-        <li class="layui-nav-item" style=" margin: 0px 15px 0px 15px;"><a class="a" href="">二</a></li>
-        <li class="layui-nav-item" style=" margin: 0px 15px 0px 15px;"><a class="a" href="">三</a></li>
-        <li class="layui-nav-item" style=" margin: 0px 15px 0px 15px;">
+        <li class="layui-nav-item"><a href="/enterIndex"><img src="../img/logos/black-logo.png" height="50" alt="logo"></a></li>
+        <li class="layui-nav-item" style=" margin: 0 15px 0 15px;"><a class="a" href="">一</a></li>
+        <li class="layui-nav-item" style=" margin: 0 15px 0 15px;"><a class="a" href="">二</a></li>
+        <li class="layui-nav-item" style=" margin: 0 15px 0 15px;"><a class="a" href="">三</a></li>
+        <li class="layui-nav-item" style=" margin: 0 15px 0 15px;">
             <a class="a" href="javascript:">四</a>
             <dl class="layui-nav-child">
                 <dd><a href="">1</a></dd>
@@ -56,37 +59,41 @@
                 <dd><a href="">3</a></dd>
             </dl>
         </li>
-        <li class="layui-nav-item" style=" margin: 0px 15px 0px 15px;"><a class="a" href="">五</a></li>
+        <li class="layui-nav-item" style=" margin: 0 15px 0 15px;"><a class="a" href="">五</a></li>
     </ul>
     <ul class="layui-nav  layui-layout-right layui-bg-blue">
-        <li class="layui-nav-item" style=" margin: 0px 15px 0px 15px;"><a class="a" href="/enterLogin">登录</a></li>
-        <li class="layui-nav-item" style=" margin: 0px 15px 0px 15px;"><a class="a" href="/enterRegister">注册</a></li>
+        <li class="layui-nav-item" style=" margin: 0 15px 0 15px;"><a class="a" href="/enterLogin">登录</a></li>
+        <li class="layui-nav-item" style=" margin: 0 15px 0 15px;"><a class="a" href="/enterRegister">注册</a></li>
     </ul>
 </div>
 
-<div style="text-align: center; top: 50px; width: 100%; height: 80%;">
+<div style="text-align: center; top: 50px; width: 100%; height: 80%;  z-index: 9;">
     <div class="layui-card" style="margin: 20px auto; height: 100%; width: 100%;">
         <div class="layui-card-body" style="padding:10px 20px 15px 20px; margin: 20px; Font-size: 17px">
             <div class="layui-form-item" style="display: flex;">
-                <p style="font-family: 华文行楷; font-size: 50px; padding: 50px 0px 30px; margin: auto;">校园购，一个追求用户满意的校园购物平台！</p>
+                <p style="font-family: 华文行楷,sans-serif; font-size: 50px; padding: 50px 0 30px; margin: auto;">校园购，一个追求用户满意的校园购物平台！</p>
             </div>
             <div class="layui-form-item" style="display: flex;">
-                <p style="font-size: 80px; padding: 50px 0px 30px; margin: auto;">Find what you need</p>
+                <p style="font-size: 80px; padding: 50px 0 30px; margin: auto;">Find what you need</p>
             </div>
             <form class="layui-form" action="" style="width: 100%; display: flex;">
-                <div class="layui-form-item" style="margin: auto; padding: 20px 0px 20px 0px">
+                <div class="layui-form-item" style="margin: auto; padding: 20px 0 20px 0">
                     <div class="layui-inline">
-                        <input type="text" name="" placeholder="What are you looking for?" style="font-size: 30px; padding: 20px 0px; width: 400px; height: 30px; text-align: center;">
+                        <label>
+                            <input type="text" name="" placeholder="What are you looking for?" style="font-size: 30px; padding: 20px 0; width: 400px; height: 30px; text-align: center;">
+                        </label>
                     </div>
                     <div class="layui-inline" style="font-size: 23px; width: 140px; line-height: 30px; text-align: center;">
-                        <select name="">
-                            <option value="">全部分类</option>
-                            <option value="">分类1</option>
-                            <option value="">分类2</option>
-                            <option value="">分类3</option>
-                            <option value="">分类4</option>
-                            <option value="">分类5</option>
-                        </select>
+                        <label>
+                            <select name="">
+                                <option value="">全部分类</option>
+                                <option value="">分类1</option>
+                                <option value="">分类2</option>
+                                <option value="">分类3</option>
+                                <option value="">分类4</option>
+                                <option value="">分类5</option>
+                            </select>
+                        </label>
                     </div>
                     <div class="layui-inline">
                         <button type="button" class="layui-btn layui-btn-lg layui-btn-radius">搜索</button>
@@ -97,9 +104,9 @@
     </div>
 </div>
 
-<div class="layui-row layui-col-space10" style="padding: 30px 0px 20px 0px; display: flex; text-align: center; width: 100%; height: 50%; background-color: #2F4056">
+<div class="layui-row layui-col-space10" style="padding: 30px 0 20px 0; display: flex; text-align: center; width: 100%; height: 50%; background-color: #2F4056;  z-index: 9;">
     <div class="layui-col-md4">
-        <img src="../img/logos/logo.png" alt="logo" style="height: 60px; padding: 0px 0px 20px 0px">
+        <img src="../img/logos/logo.png" alt="logo" style="height: 60px; padding: 0 0 20px 0">
         <div class="text">
             <p>Campus Shopping Platform（校园购物平台）. </p>
         </div>
@@ -139,13 +146,15 @@
     </div>
 </div>
 
-<div style="display: flex; text-align: center; top: 800px; width: 100%; height: 40px;">
+<!--底部信息栏-->
+<div style="display: flex; text-align: center; width: 100%; height: 40px; position: fixed; bottom:0; z-index: 10;  background-color: white">
     <p style="margin: auto">&nbsp;&nbsp;&nbsp;Copyright &nbsp;&nbsp;&nbsp; © 2020 &nbsp;&nbsp;&nbsp; 版权所属 &nbsp;&nbsp;&nbsp;Java2班14组</p>
 </div>
 
+
 <script>
     layui.use('element', function () {
-        var element = layui.element; //导航的hover效果、二级菜单等功能，需要依赖element模块
+        const element = layui.element; //导航的hover效果、二级菜单等功能，需要依赖element模块
         //监听导航点击
         element.on('nav(demo)', function (elem) {
             //console.log(elem)
@@ -155,7 +164,7 @@
 </script>
 <script>
     layui.use('form', function(){
-        var form = layui.form; //只有执行了这一步，部分表单元素才会自动修饰成功
+        const form = layui.form; //只有执行了这一步，部分表单元素才会自动修饰成功
         //……
         //但是，如果你的HTML是动态生成的，自动渲染就会失效
         //因此你需要在相应的地方，执行下述方法来进行渲染

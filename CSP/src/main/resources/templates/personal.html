@@ -4,11 +4,11 @@
 <head>
     <meta charset="UTF-8">
     <title>个人信息 - 校园购</title>
-	<link rel="shortcut icon" href="../img/favicon.ico" type="image/x-icon">
+	<link rel="shortcut icon" th:href="@{/img/favicon.ico}" type="image/x-icon">
 </head>
 <body>
 
-     <div th:each="s:${users}">
+     <div th:each="s:${user}">
      <table>
     	<tr>
     	<td>id:</td>

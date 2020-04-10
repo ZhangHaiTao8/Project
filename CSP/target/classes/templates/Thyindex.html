@@ -4,22 +4,22 @@
 <head>
     <meta charset="UTF-8">
     <title>Title</title>
-    <link rel="shortcut icon" href="../static/img/favicon.ico" type="image/x-icon">
-    <script th:src="@{/static/js/jquery-3.3.1.js}"></script>
+    <link rel="shortcut icon" th:href="@{/img/favicon.ico}" type="image/x-icon">
+    <script th:src="@{/js/jquery-3.3.1.js}"></script>
 </head>
 <body>
     <div id="app">
         {{message}}
     </div>
 
-    <script th:src="@{/static/js/vue.js}"></script>
+    <script th:src="@{/js/vue.js}"></script>
     <script>
-        var app=new Vue({
-            el:"#app",
-            data:{
-                message:"Hello Vue"
+        const app = new Vue({
+            el: "#app",
+            data: {
+                message: "Hello Vue"
             }
-        })
+        });
     </script>
 </body>
 </html>
