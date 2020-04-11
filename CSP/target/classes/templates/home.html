@@ -44,7 +44,7 @@
 <!--顶部导航栏-->
 <div style="top: 0; position: fixed; width: 100%; z-index: 10;">
     <ul class="layui-nav layui-bg-blue">
-        <li class="layui-nav-item"><a href="/enterHome"><img src="../img/logos/black-logo.png" height="50" alt="logo"></a></li>
+        <li class="layui-nav-item"><a href="/enterHome"><img th:src="@{/img/logos/black-logo.png}" height="50" alt="logo"></a></li>
         <li class="layui-nav-item" style=" margin: 0 15px 0 15px;"><a class="a" href="">一</a></li>
         <li class="layui-nav-item" style=" margin: 0 15px 0 15px;"><a class="a" href="">二</a></li>
         <li class="layui-nav-item" style=" margin: 0 15px 0 15px;"><a class="a" href="">三</a></li>
@@ -59,7 +59,7 @@
         <li class="layui-nav-item" style=" margin: 0 15px 0 15px;"><a class="a" href="">五</a></li>
     </ul>
     <ul class="layui-nav  layui-layout-right layui-bg-blue">
-        <li class="layui-nav-item" style=" margin: 0 15px 0 15px;"><a class="a" href="javascript:" th:text="${user.uname}">></a>
+        <li class="layui-nav-item" style=" margin: 0 15px 0 15px;"><a class="a" href="javascript:" text="${user.uname}">***</a>
             <dl class="layui-nav-child">
                 <dd><a href="/enterPersonal">个人信息</a></dd>
                 <dd><a href="">2</a></dd>
@@ -69,7 +69,7 @@
 </div>
 
 <div style="text-align: center; width: 100%; height: 80%;  z-index: 9;">
-    <div class="layui-card" style="margin: 20px auto; height: 100%; width: 100%;">
+    <div class="layui-card" style="margin: 20px auto; height: auto; width: 100%;">
         <div class="layui-card-body" style="top: 50px; padding:10px 20px 15px 20px; margin: 20px; Font-size: 17px">
             <form class="layui-form" action="" style="width: 100%; display: flex;">
                 <div class="layui-form-item" style="margin: auto; padding: 20px 0 20px 0">
@@ -80,13 +80,14 @@
                     </div>
                     <div class="layui-inline" style="font-size: 23px; width: 140px; line-height: 30px; text-align: center;">
                         <label>
-                            <select name="">
+                            <select name="gType">
                                 <option value="">全部分类</option>
-                                <option value="">分类1</option>
-                                <option value="">分类2</option>
-                                <option value="">分类3</option>
-                                <option value="">分类4</option>
-                                <option value="">分类5</option>
+                                <option value="food">食品饮料</option>
+                                <option value="home">家居日用</option>
+                                <option value="travel">交通出行</option>
+                                <option value="electronic">电子数码</option>
+                                <option value="literature">文学资料</option>
+                                <option value="other">&nbsp;其它&nbsp;</option>
                             </select>
                         </label>
                     </div>
@@ -95,6 +96,7 @@
                     </div>
                 </div>
             </form>
+            <button type="button" id="button2" class="layui-btn layui-btn-lg"><a href="/enterGoodList">查看全部商品</a></button>
         </div>
     </div>
 </div>
@@ -102,8 +104,9 @@
 <div style="margin: 80px auto 40px auto; width: 70%;  z-index: 9; bottom:40px;">
     <div class="layui-row">
         <div class="layui-col-md9">
-            <div class="grid-demo grid-demo-bg1" style="margin: auto; height: auto; background-color: #cccccc;">
-                <div class="layui-fluid" id="LAY-component-grid-list">
+            <div class="grid-demo grid-demo-bg1" style="text-align: center; margin: auto; padding-top: 15px; height: auto; background-color: #cccccc;">
+                <label style="font-size: 30px;">推荐商品</label>
+                <div class="layui-fluid" id="LAY-component-grid-list" style="text-align: center; padding: 20px 20px 20px 20px;">
                     <div id="card" class="layui-row layui-col-space10 demo-list">
                     </div>
                 </div>
@@ -137,11 +140,11 @@
             cache: false,
             dataType: 'json',
             type: 'post',
-            url: "/AllGoods",
+            url: "/RandomGoods",
             success: function (result) {
                 //console.log(result);
                 for (let i = 0; i < result.length; i++) {
-                    const mydiv = '<div class="layui-col-xs3"><div class="layui-card"><form style="height: 290px; width: 200px;"><!--img id="c_photo" src="../img/goods/' + '"style="height: 250px; width: 200px;"--><div style="font-size: 20px"><label>' + result[i].gName + '</label><label style="float: right;">￥' + result[i].gPrice + '</label></div></form></div></div>';
+                    const mydiv = '<div class="layui-col-xs3"><div class="layui-card"><a><form style="height: 280px; width: 200px;"><!--img id="c_photo" src="../img/goods/' + '"style="height: 250px; width: 200px;"--><div style="font-size: 20px"><label style="float: left;">' + result[i].gName + '</label><label style="float: right;">￥' + result[i].gPrice + '</label></div></form></a></div></div>';
                     $("#card").append(mydiv);
                 }
             }

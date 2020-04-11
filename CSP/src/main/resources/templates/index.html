@@ -47,7 +47,7 @@
 <!--顶部导航栏-->
 <div style="top: 0; position: fixed; width: 100%;  z-index: 10;">
     <ul class="layui-nav layui-bg-blue">
-        <li class="layui-nav-item"><a href="/enterIndex"><img src="../img/logos/black-logo.png" height="50" alt="logo"></a></li>
+        <li class="layui-nav-item"><a href="/enterIndex"><img th:src="@{/img/logos/black-logo.png}" height="50" alt="logo"></a></li>
         <li class="layui-nav-item" style=" margin: 0 15px 0 15px;"><a class="a" href="">一</a></li>
         <li class="layui-nav-item" style=" margin: 0 15px 0 15px;"><a class="a" href="">二</a></li>
         <li class="layui-nav-item" style=" margin: 0 15px 0 15px;"><a class="a" href="">三</a></li>
@@ -85,13 +85,14 @@
                     </div>
                     <div class="layui-inline" style="font-size: 23px; width: 140px; line-height: 30px; text-align: center;">
                         <label>
-                            <select name="">
+                            <select name="gType">
                                 <option value="">全部分类</option>
-                                <option value="">分类1</option>
-                                <option value="">分类2</option>
-                                <option value="">分类3</option>
-                                <option value="">分类4</option>
-                                <option value="">分类5</option>
+                                <option value="food">食品饮料</option>
+                                <option value="home">家居日用</option>
+                                <option value="travel">交通出行</option>
+                                <option value="electronic">电子数码</option>
+                                <option value="literature">文学资料</option>
+                                <option value="other">&nbsp;其它&nbsp;</option>
                             </select>
                         </label>
                     </div>
@@ -106,7 +107,7 @@
 
 <div class="layui-row layui-col-space10" style="padding: 30px 0 20px 0; display: flex; text-align: center; width: 100%; height: 50%; background-color: #2F4056;  z-index: 9;">
     <div class="layui-col-md4">
-        <img src="../img/logos/logo.png" alt="logo" style="height: 60px; padding: 0 0 20px 0">
+        <img th:src="@{/img/logos/logo.png}" alt="logo" style="height: 60px; padding: 0 0 20px 0">
         <div class="text">
             <p>Campus Shopping Platform（校园购物平台）. </p>
         </div>
@@ -148,7 +149,7 @@
 
 <!--底部信息栏-->
 <div style="display: flex; text-align: center; width: 100%; height: 40px; position: fixed; bottom:0; z-index: 10;  background-color: white">
-    <p style="margin: auto">&nbsp;&nbsp;&nbsp;Copyright &nbsp;&nbsp;&nbsp; © 2020 &nbsp;&nbsp;&nbsp; 版权所属 &nbsp;&nbsp;&nbsp;Java2班14组</p>
+    <p style="margin: auto"> &nbsp; Copyright &nbsp; © 2020 &nbsp; 版权所属 &nbsp; Java2班14组</p>
 </div>
 
 

@@ -1,6 +1,7 @@
 package com.shisizu.service;
 
 import com.shisizu.domain.Good;
+import org.apache.ibatis.annotations.Param;
 
 import java.util.List;
 
@@ -11,6 +12,6 @@ import java.util.List;
 
 public interface GoodService {
 
-    List<Good> selectAll();
-
+    List<Good> selectRandom();
+    List<Good> selectType(String gType);
 }

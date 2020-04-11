@@ -20,7 +20,12 @@ public class GoodServiceImp implements GoodService {
     private GoodDao goodDao;
 
     @Override
-    public List<Good> selectAll() {
-        return goodDao.selectAll();
+    public List<Good> selectRandom() {
+        return goodDao.selectRandom();
+    }
+
+    @Override
+    public List<Good> selectType(String gType) {
+        return goodDao.selectType(gType);
     }
 }

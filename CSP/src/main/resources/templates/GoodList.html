@@ -2,7 +2,7 @@
 <html lang="en" xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
-    <title>首页 - 校园购</title>
+    <title>商品列表 - 校园购</title>
     <!-- Favicon icon -->
     <link rel="shortcut icon" th:href="@{/img/favicon.ico}" type="image/x-icon">
 
@@ -14,6 +14,12 @@
     <script th:src="@{/layui/layui.js}" charset="utf-8"></script>
 
     <script th:src="@{/js/jquery-3.3.1.js}"></script>
+    <!-- 让IE8/9支持媒体查询，从而兼容栅格 -->
+    <!--[if lt IE 9]>
+    <script src="https://cdn.staticfile.org/html5shiv/r29/html5.min.js"></script>
+    <script src="https://cdn.staticfile.org/respond.js/1.4.2/respond.min.js"></script>
+    <![endif]-->
+
     <style>
         .layui-select,.layui-input{
             height:76px;
@@ -23,31 +29,22 @@
             font-family: 华文新魏,sans-serif;
             font-size: 30px;
         }
-        .layui-btn,.layui-btn-lg,.layui-btn-normal,.layui-btn-radius{
+        #button{
             font-family: 华文新魏,sans-serif;
             font-size: 30px;
             height: 70px;
         }
-        .title{
-            padding: 0 0 10px 0;
-            font-family: 华文行楷,sans-serif;
-            font-size: 2rem;
-            color: #cccccc;
-        }
-        .text{
-            margin: 10px 10px 10px 10px;
-            font-family: 华文楷体,sans-serif;
-            font-size: 20px;
-            color: white;
-        }
-    </style>
-</head>
 
-<body>
+    </style>
+
+
+
+</head>
+<body onload="typegoodslist('')">
 <!--顶部导航栏-->
-<div style="top: 0; position: fixed; width: 100%;  z-index: 10;">
+<div style="top: 0; position: fixed; width: 100%; z-index: 10;">
     <ul class="layui-nav layui-bg-blue">
-        <li class="layui-nav-item"><a href="/enterIndex"><img th:src="@{/img/logos/black-logo.png}" height="50" alt="logo"></a></li>
+        <li class="layui-nav-item"><a href="/enterHome"><img th:src="@{/img/logos/black-logo.png}" height="50" alt="logo"></a></li>
         <li class="layui-nav-item" style=" margin: 0 15px 0 15px;"><a class="a" href="">一</a></li>
         <li class="layui-nav-item" style=" margin: 0 15px 0 15px;"><a class="a" href="">二</a></li>
         <li class="layui-nav-item" style=" margin: 0 15px 0 15px;"><a class="a" href="">三</a></li>
@@ -62,20 +59,18 @@
         <li class="layui-nav-item" style=" margin: 0 15px 0 15px;"><a class="a" href="">五</a></li>
     </ul>
     <ul class="layui-nav  layui-layout-right layui-bg-blue">
-        <li class="layui-nav-item" style=" margin: 0 15px 0 15px;"><a class="a" href="/enterLogin">登录</a></li>
-        <li class="layui-nav-item" style=" margin: 0 15px 0 15px;"><a class="a" href="/enterRegister">注册</a></li>
+        <li class="layui-nav-item" style=" margin: 0 15px 0 15px;"><a class="a" href="javascript:" text="${user.uname}">***</a>
+            <dl class="layui-nav-child">
+                <dd><a href="/enterPersonal">个人信息</a></dd>
+                <dd><a href="">2</a></dd>
+                <dd><a href="/enterLogin">退出登录</a></dd>
+            </dl></li>
     </ul>
 </div>
 
-<div style="text-align: center; top: 50px; width: 100%; height: 80%;  z-index: 9;">
-    <div class="layui-card" style="margin: 20px auto; height: 100%; width: 100%;">
-        <div class="layui-card-body" style="padding:10px 20px 15px 20px; margin: 20px; Font-size: 17px">
-            <div class="layui-form-item" style="display: flex;">
-                <p style="font-family: 华文行楷,sans-serif; font-size: 50px; padding: 50px 0 30px; margin: auto;">校园购，一个追求用户满意的校园购物平台！</p>
-            </div>
-            <div class="layui-form-item" style="display: flex;">
-                <p style="font-size: 80px; padding: 50px 0 30px; margin: auto;">Find what you need</p>
-            </div>
+<div style="text-align: center; width: 100%; height: 80%;  z-index: 9;">
+    <div class="layui-card" style="margin: 20px auto; height: auto; width: 100%;">
+        <div class="layui-card-body" style="top: 50px; padding:10px 20px 15px 20px; margin: 20px; Font-size: 17px">
             <form class="layui-form" action="" style="width: 100%; display: flex;">
                 <div class="layui-form-item" style="margin: auto; padding: 20px 0 20px 0">
                     <div class="layui-inline">
@@ -97,7 +92,7 @@
                         </label>
                     </div>
                     <div class="layui-inline">
-                        <button type="button" class="layui-btn layui-btn-lg layui-btn-radius">搜索</button>
+                        <button type="button" id="button" class="layui-btn layui-btn-lg layui-btn-radius">搜索</button>
                     </div>
                 </div>
             </form>
@@ -105,53 +100,26 @@
     </div>
 </div>
 
-<div class="layui-row layui-col-space10" style="padding: 30px 0 20px 0; display: flex; text-align: center; width: 100%; height: 50%; background-color: #2F4056;  z-index: 9;">
-    <div class="layui-col-md4">
-        <img th:src="@{/img/logos/logo.png}" alt="logo" style="height: 60px; padding: 0 0 20px 0">
-        <div class="text">
-            <p>Campus Shopping Platform（校园购物平台）. </p>
+<div style="margin: 40px auto 40px auto; width: 66%; z-index: 9; bottom:40px;">
+    <div class="grid-demo grid-demo-bg1" style="text-align: center; margin: auto; padding-top: 15px; height: auto; background-color: #cccccc;">
+        <a style="font-size: 30px; padding: 0 20px 0 20px;" onclick="typegoodslist('')">所有商品</a>
+        <a style="font-size: 30px; padding: 0 20px 0 20px;" onclick="typegoodslist('food')">食品饮料</a>
+        <a style="font-size: 30px; padding: 0 20px 0 20px;" onclick="typegoodslist('home')">家居日用</a>
+        <a style="font-size: 30px; padding: 0 20px 0 20px;" onclick="typegoodslist('travel')">交通出行</a>
+        <a style="font-size: 30px; padding: 0 20px 0 20px;" onclick="typegoodslist('electronic')">电子数码</a>
+        <a style="font-size: 30px; padding: 0 20px 0 20px;" onclick="typegoodslist('literature')">文学资料</a>
+        <a style="font-size: 30px; padding: 0 20px 0 20px;" onclick="typegoodslist('other')">&nbsp;其它&nbsp;</a>
+        <div class="layui-fluid" id="LAY-component-grid-list" style="text-align: center; padding: 20px 10px 20px 10px;">
+            <div id="card" class="layui-row layui-col-space10 demo-list" style="text-align: center;">
+            </div>
         </div>
-    </div>
-    <div class="layui-col-md4">
-        <h3 class="title">联系我们</h3>
-        <ul class="text">
-            <li>
-                <i class="layui-icon layui-icon-email" style="font-size: 30px;"></i>
-                <a class="text" href="mailto:12345678910@163.com">12345678910@163.com</a>
-            </li>
-            <li>
-                <i class="layui-icon layui-icon-cellphone" style="font-size: 25px;"></i>
-                <a class="text" href="tel:+86-1234-1234-123">+86 1234 1234 123</a>
-            </li>
-        </ul>
-    </div>
-    <div class="layui-col-md4">
-        <h3 class="title">快速链接</h3>
-        <ul>
-            <li>
-                <a class="text" href="">系统首页</a>
-            </li>
-            <li>
-                <a class="text" href="">系统首页</a>
-            </li>
-            <li>
-                <a class="text" href="">系统首页</a>
-            </li>
-            <li>
-                <a class="text" href="">系统首页</a>
-            </li>
-            <li>
-                <a class="text" href="">系统首页</a>
-            </li>
-        </ul>
     </div>
 </div>
 
 <!--底部信息栏-->
-<div style="display: flex; text-align: center; width: 100%; height: 40px; position: fixed; bottom:0; z-index: 10;  background-color: white">
-    <p style="margin: auto"> &nbsp; Copyright &nbsp; © 2020 &nbsp; 版权所属 &nbsp; Java2班14组</p>
+<div style="display: flex; text-align: center; width: 100%; height: 40px; position: fixed; bottom:0; z-index: 10; background-color: white">
+    <p style="margin: auto">&nbsp;Copyright &nbsp; © 2020 &nbsp; 版权所属 &nbsp; Java2班14组</p>
 </div>
-
 
 <script>
     layui.use('element', function () {
@@ -162,6 +130,25 @@
             layer.msg(elem.text());
         });
     });
+</script>
+
+<script>
+    function typegoodslist (gType){
+        $("#card").empty();
+        $.ajax({
+            cache: false,
+            dataType: 'json',
+            type: 'post',
+            url: "/typeGoods?gType="+gType,
+            success: function (result) {
+                //console.log(result);
+                for (let i = 0; i < result.length; i++) {
+                    const mydiv = '<div class="layui-col-md3" style="height: 300px; width: 220px;"><div class="layui-card"><a><form style="height: 280px; width: 200px;"><!--img id="c_photo" src="../img/goods/' + '"style="height: 250px; width: 200px;"--><div style="font-size: 20px"><label style="float: left;">' + result[i].gName + '</label><label style="float: right;">￥' + result[i].gPrice + '</label></div></form></a></div></div>';
+                    $("#card").append(mydiv);
+                }
+            }
+        });
+    }
 </script>
 <script>
     layui.use('form', function(){

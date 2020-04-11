@@ -15,5 +15,6 @@ import java.util.List;
 @Mapper
 public interface GoodDao extends BaseMapper<Good> {
 
-    List<Good> selectAll();
+    List<Good> selectRandom();
+    List<Good> selectType(@Param("gType") String gType);
 }
