@@ -13,8 +13,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 public class TestController {
     public static final Logger LOGGER= (Logger) LoggerFactory.getLogger(TestController.class);
     @RequestMapping("/Thyindex")
-    public String index(){
+    public String index1(){
         LOGGER.info("JspsController执行！！！日志记录！！！");
-        return "Thyindex";
+        return "ShoppingCart";
     }
 }

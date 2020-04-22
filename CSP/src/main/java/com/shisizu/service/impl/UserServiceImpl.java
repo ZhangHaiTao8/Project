@@ -26,4 +26,24 @@ public class UserServiceImpl implements UserService {
     public int userRegisterInsert(User user) {
         return userDao.userRegisterInsert(user);
     }
+
+    @Override
+    public User selectByName(String uphone) {
+        return userDao.selectByName(uphone);
+    }
+
+    @Override
+    public String selectCodeByEmail(String uemail) {
+        return userDao.selectCodeByEmail(uemail);
+    }
+
+    @Override
+    public int updateCodeByOldCode(String uemail, String upassword2) {
+        return userDao.updateCodeByOldCode(uemail,upassword2);
+    }
+
+    @Override
+    public User checkUser(String uname) {
+        return userDao.checkUser(uname);
+    }
 }

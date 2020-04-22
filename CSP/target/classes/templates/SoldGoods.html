@@ -1,0 +1,167 @@
+<!DOCTYPE html>
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
+<head>
+<meta charset="UTF-8">
+<title>我要卖</title>
+<script th:src="@{/js/jquery-3.3.1.js}"></script>
+<!-- 引入样式 -->
+<link th:href="@{/bootstrap3/css/bootstrap.min.css}" th:rel="stylesheet">
+<script th:src="@{/bootstrap3/js/bootstrap.min.js}"></script>
+<!-- 引入layui -->
+<link th:rel="stylesheet" th:href="@{/layui/css/layui.css}">
+<style type="text/css">
+    a {
+        font-size: 34px;
+        color:#101f3d;
+        font-weight: bold;
+    }
+    .line {
+        width: 1px;
+        height: 12px;
+        background: #808080;
+        display: inline-block;
+        margin: 0 10px;
+        position: relative;
+        top: -5px
+    }
+    .h-label {
+        color:#666;
+        font-size: 20px;
+        position: relative;
+        top: -5px;
+    }
+    #rw1{
+        margin-top: 2%;
+        margin-bottom: 5%;
+    }
+</style>
+</head>
+<body>
+    <div class="header">
+        这是头部
+    </div>
+    <div class="content">
+        <div class="container">
+            <div class="row" id="rw1">
+                <a href="javascript:;">校园购</a>
+                <span class="line"></span>
+                <span class="h-label">我要卖</span>
+            </div>
+            <div class="row" id="rw2">
+                <div class="col-md-4 col-md-offset-1">
+                    <div id="outFile">
+                        <img src="" id="imgInsert">
+                        <div class="form-group">
+                            <form id="uploadForm" enctype="mutipart/form-data">
+                                <input type="file" name="file" id="file">
+                            </form>
+                        </div>
+                        <div class="form-group" style="padding-left: 30px;">
+                            <button id="upload_btn_file" class="layui-btn" type="button">上传文件</button>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-7">
+                    <div class="otherFile">
+                        <form class="form-horizontal" id="otherForm">
+                            <input type="hidden" name="gpicture" id="addgpicture" value=""/>
+                            <input type="hidden" th:value="${uid}" id="adduid" name="uid"/>
+                            <div class="form-group">
+                                <label class="col-md-3  control-label" >商品名：</label>
+                                <div class="col-md-4">
+                                    <input type="text" name="gname" id="addgname" class="form-control">
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label class="col-md-3  control-label">库存：</label>
+                                <div class="col-md-4">
+                                    <input type="text" name="gcount" id="addgcount" class="form-control">
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label class="col-md-3  control-label">单价：</label>
+                                <div class="col-md-4">
+                                    <input type="text" name="gprice" id="addgprice" class="form-control">
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label class="col-md-3  control-label">分类：</label>
+                                <div class="col-md-4">
+                                   <select class="form-control" id="addgtype" name="gtype">
+                                       <option>手机</option>
+                                       <option>电脑</option>
+                                   </select>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label class="col-md-3  control-label">描述：</label>
+                                <div class="col-md-6">
+                                    <textarea class="form-control" rows="3" id="addgdetails" name="gdetails"></textarea>
+                                </div>
+                            </div>
+                            <br>
+                            <div class="form-group">
+                                <div class="col-md-4" style="padding-left: 20%">
+                                    <button type="button" class="btn btn-info btn-lg" id="addShop" style="width: 250px">上架</button>
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="footer"></div>
+
+
+<script th:src="@{/layui/layui.js}"></script>
+<script>
+//JavaScript代码区域
+layui.use(['element','form','jquery','layui'], function(){
+    var element = layui.element;
+    var form=layui.form;
+    var $=layui.$;
+    var layer=layui.layer;
+});
+
+    $(document).ready(function () {
+    //上传图片
+    $("#upload_btn_file").click(function () {
+        var formData = new FormData($('#uploadForm')[0]);//序列化表单，将上传类型设置为文件对象
+        //获取该用户的id
+        $.ajax({
+            url:"uploadFile",
+            type:"post",
+            data: formData,
+            cache: false,//文件不设置缓存
+            processData: false,//数据不被转换为字符串
+            contentType: false,//上传文件时使用，避免 JQuery 对其操作
+            success:function(result){
+                $("#imgInsert").attr("src",result.extend.file);
+                //alert(result.extend.file);
+                $("#addgpicture").val(result.extend.file);
+            }
+        });
+    });
+
+
+    $("#addShop").click(function () {
+        $.ajax({
+            url:"soldGoodsInsert",
+            type:"post",
+            data:$("#otherForm").serialize(),
+            success:function (result) {
+                //alert(result.code);
+                if(result.code==100){
+                    layer.alert("上架成功", {icon: 1}, function (index) {
+                        window.location.href = "/enterHome";
+                        layer.close(index);
+                    });
+                }
+            }
+        });
+    });
+});
+</script>
+</body>
+</html>

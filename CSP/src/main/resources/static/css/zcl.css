@@ -1,0 +1,68 @@
+/*表单模块*/
+.layui-select,.layui-input{
+    height:76px;
+    padding:0 15px 0 15px;
+}
+
+/*文本模块*/
+.title{
+    padding: 0 0 10px 0;
+    font-family: 华文行楷,sans-serif;
+    font-size: 2rem;
+    color: #cccccc;
+}
+.text{
+    margin: 10px 10px 10px 10px;
+    font-family: 华文楷体,sans-serif;
+    font-size: 20px;
+    color: white;
+}
+
+/*按钮模块*/
+#loginBtn{
+    font-family: 华文新魏,sans-serif;
+    color: #2F4F4F;
+    font-size: 30px;
+    height: 70px;
+}
+#selectBtn{
+    font-family: 华文新魏,sans-serif;
+    color: #2F4F4F;
+    font-size: 30px;
+    height: 70px;
+}
+#allBtn{
+    font-family: 华文新魏,sans-serif;
+    color: #2F4F4F;
+    font-size: 30px;
+    height: 70px;
+}
+
+/*分页模块*/
+.layui-laypage .layui-laypage-count{
+    padding: 0 8px 0 8px;
+}
+.layui-laypage .layui-laypage-skip {
+    color: #0C0C0C;
+    padding: 0 0 0 8px;
+}
+.layui-laypage a, .layui-laypage span{
+    font-size: 18px;
+}
+.layui-laypage select{
+    height: 23px;
+    width: 93px;
+    padding: 1px 0 3px 25px;
+    -webkit-appearance:none;
+    -moz-appearance:none;
+    appearance:none;
+}
+.layui-laypage button, .layui-laypage input {
+    border: 2px solid #808080;
+}
+
+/*自定义模块*/
+.a{
+    font-family: 华文新魏,sans-serif;
+    font-size: 30px;
+}

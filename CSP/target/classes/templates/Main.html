@@ -1,0 +1,135 @@
+<!DOCTYPE html>
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>主页面</title>
+    <script th:src="@{/js/jquery-3.3.1.js}"></script>
+    <!-- 引入样式 -->
+    <link th:href="@{/bootstrap3/css/bootstrap.min.css}" th:rel="stylesheet">
+    <script th:src="@{/bootstrap3/js/bootstrap.min.js}"></script>
+    <!-- 引入layui -->
+    <link th:rel="stylesheet" th:href="@{/layui/css/layui.css}">
+
+</head>
+<body>
+
+<!-- 头部 -->
+<div class="header">
+    <div class="layui-layout layui-layout-admin">
+        <div class="layui-header">
+            <div class="layui-logo">
+                <h2 style="margin-top:8px;">校园购</h2>
+            </div>
+            <ul class="layui-nav layui-layout-right">
+                <li class="layui-nav-item">
+                    <a href="javascript:;" id="soldGoods">我要卖</a>
+                </li>
+                <li class="layui-nav-item">
+                    <a href="javascript:;" id="aName">
+                        <img th:src="${session.user.uhead}" class="layui-nav-img">
+                        欢迎你,<span th:text="${session.user.uname}"></span>
+                    </a>
+                </li>
+                <li class="layui-nav-item">
+                    <a href="javascript:;" id="logOut">退出登录</a>
+                </li>
+            </ul>
+        </div>
+    </div>
+</div>
+<!--中间-->
+<div class="content">
+    <h2 align="center" style="margin-top: 20px">欢迎来到主界面</h2>
+    <div class="container">
+        <div class="row">
+            <table class="table table-bordered" id="goods_table">
+                <thead>
+                <tr class="tr1 layui-bg-green">
+                    <th width="10%">图片</th>
+                    <th width="15%">商品名</th>
+                    <th width="15%">库存</th>
+                    <th width="10%">价格</th>
+                    <th width="20%">分类</th>
+                    <th width="15%">用户名</th>
+                </tr>
+                </thead>
+            </table>
+        </div>
+    </div>
+</div>
+<!--尾部-->
+<div class="footer">
+    <p align="center">Copyright © 2019-2020.(V1.0)安信工校园购</p>
+</div>
+
+<script th:src="@{/layui/layui.js}"></script>
+<script>
+//JavaScript代码区域
+layui.use(['element','form','jquery','layui'], function(){
+    var element = layui.element;
+    var form=layui.form;
+    var $=layui.$;
+    var layer=layui.layer;
+});
+//退出登录
+$(document).ready(function () {
+    $("#logOut").click(function(){
+        $.ajax({
+            url:"logout",
+            type:"post",
+            success:function(result){
+                layer.confirm("您确定要退出吗？",{icon:7,title:"提示"},function(index){
+                    window.location.href="enterLogin";
+                    layer.close(index);
+                });
+            }
+        });
+    });
+
+    //商品请求
+    $.ajax({
+        url:"http://localhost:8080/goods/selectGoodsAndUser",
+        type:"post",
+        success:function (result) {
+            var list =result.extend.goodsInfo;
+            console.log(list);
+            $.each(list,function (index, item) {
+                var gidTh=item.gid;
+                var gpictureTh=$("<th></th>").append("<img src="+item.gpicture+" style='height:90px;width:160px;'>");
+                var gnameTh=$("<th></th>").append("<a href='#'>"+item.gname+"</a>").addClass("gnameBtn");
+                var gcountTh=$("<th></th>").append(item.gcount);
+                var gpriceTh=$("<th></th>").append(item.gprice);
+                var gtypeTh=$("<th></th>").append(item.gtype);
+                var unameTh=$("<th></th>").append(item.uname);
+                //为商品名添加id
+                gnameTh.attr("gnameid",gidTh);
+                $("<tr></tr>").append(gpictureTh)
+                    .append(gnameTh).append(gcountTh)
+                    .append(gpriceTh)
+                    .append(gtypeTh).append(unameTh)
+                    .appendTo("#goods_table");
+            });
+        }
+    });
+});
+
+$(document).on("click",".gnameBtn",function() {
+    //获取商品的id
+    var gid=$(this).attr("gnameid");
+    window.location.href="http://localhost:8080/goods/enterDetails?gid="+gid;
+});
+$(document).ready(function () {
+    $("#soldGoods").click(function () {
+        $.ajax({
+            url:"http://localhost:8080/user/getUserId",
+            type:"post",
+            success:function (result) {
+                var uid=result.extend.uid;
+                window.location.href="http://localhost:8080/soldgoods/enterSoldGoods?uid="+uid;
+            }
+        })
+    });
+});
+</script>
+</body>
+</html>

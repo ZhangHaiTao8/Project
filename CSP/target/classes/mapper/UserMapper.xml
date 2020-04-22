@@ -4,7 +4,7 @@
     <select id="selectByName" resultType="com.shisizu.domain.User" parameterType="String">
         select *
         from user
-        where uname=#{name}
+        where uphone=#{uphone}
     </select>
 
     <!--用户登录-->
@@ -18,4 +18,21 @@
 		into user(uname,upassword,uphone,uemail)
 		values(#{uname},#{upassword},#{uphone},#{uemail})
 	</insert>
+
+    <!--查找根据邮箱查找密码-->
+    <select id="selectCodeByEmail" resultType="java.lang.String">
+		select upassword from user where uemail=#{uemail}
+	</select>
+
+    <!-- 根据邮箱修改密码 -->
+    <update id="updateCodeByOldCode" parameterType="com.shisizu.domain.User">
+		update user set
+		upassword=#{upassword2}
+		where uemail=#{uemail}
+	</update>
+
+    <!--用户注册时查询用户名是否已经存在-->
+    <select id="checkUser" resultType="com.shisizu.domain.User">
+		select * from user where uname=#{uname}
+	</select>
 </mapper>

@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Config 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.shisizu.dao.SoldGoodsDao">
+	<select id="selectByGid" resultType="java.lang.Integer" parameterType="java.lang.Integer">
+		select uid
+		from soldgoods
+		where gid=#{gid}
+	</select>
+	<insert id="soldGoodsInsert" parameterType="com.shisizu.domain.UG">
+		insert
+		into Goods(gname,gprice,gcount,gtype,gdetails,uid,gpicture)
+		values(#{gname},#{gprice},#{gcount},#{gtype},#{gdetails},#{uid},#{gpicture})
+	</insert>
+</mapper>

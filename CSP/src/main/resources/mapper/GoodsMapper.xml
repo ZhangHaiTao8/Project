@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Config 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.shisizu.dao.GoodsDao">
+    <!-- 主页随机查询部分商品信息 -->
+    <select id="selectRandom" resultType="com.shisizu.domain.Goods" parameterType="String">
+        SELECT * FROM goods where gType LIKE CONCAT('%',#{gType},'%') ORDER BY  RAND() LIMIT 4
+    </select>
+    <!-- 分类查询所有商品信息 -->
+    <select id="selectType" resultType="com.shisizu.domain.Goods" parameterType="String">
+        SELECT * FROM goods where gType LIKE CONCAT('%',#{gType},'%')
+    </select>
+    <!-- 模糊查询商品信息 -->
+    <select id="selectInput" resultType="com.shisizu.domain.Goods" parameterType="String">
+        SELECT * FROM goods where gType LIKE CONCAT('%',#{gType},'%') AND gName LIKE CONCAT('%',#{gName},'%')
+    </select>
+    <!-- 根据当前用户的uphone，查询所有商品信息 -->
+    <select id="selectGoodsInfo" resultType="com.shisizu.domain.Goods">
+		select * from goods where Uphone=#{uphone}
+	</select>
+    <!-- 根据商品id(goodsID)删除商品 -->
+    <delete id="deleteGoodsById" parameterType="Integer">
+		delete from goods where GoodsID=#{goodsID};
+	</delete>
+
+    <select id="selectGoodsAndUser" resultType="com.shisizu.domain.UG">
+        select *
+        from user,goods
+        where user.uid=goods.uid
+    </select>
+
+    <select id="selectAllGoods" resultType="com.shisizu.domain.Goods">
+		select * from goods;
+	</select>
+</mapper>

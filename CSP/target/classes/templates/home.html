@@ -4,83 +4,71 @@
     <meta charset="UTF-8">
     <title>首页 - 校园购</title>
     <!-- Favicon icon -->
-    <link rel="shortcut icon" th:href="@{/img/favicon.ico}" type="image/x-icon">
+    <link rel="shortcut icon" th:href="@{/images/favicon.ico}" type="image/x-icon">
 
     <meta name="renderer" content="webkit">
     <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
 
     <link rel="stylesheet" th:href="@{/layui/css/layui.css}" media="all">
-    <script th:src="@{/layui/layui.js}" charset="utf-8"></script>
+    <link rel="stylesheet" th:href="@{/css/zcl.css}" media="all">
 
+    <script th:src="@{/layui/layui.js}" charset="utf-8"></script>
     <script th:src="@{/js/jquery-3.3.1.js}"></script>
+    <script th:src="@{/js/zcl.js}"></script>
+    <script th:src="@{/js/clock.js}"></script>
+
     <!-- 让IE8/9支持媒体查询，从而兼容栅格 -->
     <!--[if lt IE 9]>
     <script src="https://cdn.staticfile.org/html5shiv/r29/html5.min.js"></script>
     <script src="https://cdn.staticfile.org/respond.js/1.4.2/respond.min.js"></script>
     <![endif]-->
 
-    <style>
-        .layui-select,.layui-input{
-            height:76px;
-            padding:0 15px 0 15px;
-        }
-        .a{
-            font-family: 华文新魏,sans-serif;
-            font-size: 30px;
-        }
-        #button{
-            font-family: 华文新魏,sans-serif;
-            font-size: 30px;
-            height: 70px;
-        }
-
-    </style>
-
-
-
 </head>
-<body onload="goodslist()">
+<body onload="randomGoodslist1(),randomGoodslist2(),randomGoodslist3(),randomGoodslist4(),randomGoodslist5(),randomGoodslist6(),showTime()">
 <!--顶部导航栏-->
 <div style="top: 0; position: fixed; width: 100%; z-index: 10;">
     <ul class="layui-nav layui-bg-blue">
-        <li class="layui-nav-item"><a href="/enterHome"><img th:src="@{/img/logos/black-logo.png}" height="50" alt="logo"></a></li>
-        <li class="layui-nav-item" style=" margin: 0 15px 0 15px;"><a class="a" href="">一</a></li>
-        <li class="layui-nav-item" style=" margin: 0 15px 0 15px;"><a class="a" href="">二</a></li>
-        <li class="layui-nav-item" style=" margin: 0 15px 0 15px;"><a class="a" href="">三</a></li>
+        <li class="layui-nav-item"><a href="/enterHome"><img th:src="@{/images/logo/black-logo.png}" height="50px" alt="logo"></a></li>
+        <li class="layui-nav-item" style=" margin: 0 5px 0 5px;"><a class="a" href="">一</a></li>
+        <li class="layui-nav-item" style=" margin: 0 5px 0 5px;"><a class="a" href="">二</a></li>
         <li class="layui-nav-item" style=" margin: 0 15px 0 15px;">
-            <a class="a" href="javascript:">四</a>
+            <a class="a" href="javascript:">三</a>
             <dl class="layui-nav-child">
                 <dd><a href="">1</a></dd>
                 <dd><a href="">2</a></dd>
                 <dd><a href="">3</a></dd>
             </dl>
         </li>
-        <li class="layui-nav-item" style=" margin: 0 15px 0 15px;"><a class="a" href="">五</a></li>
+        <li class="layui-nav-item" style=" margin: 0 5px 0 5px;"><a class="a" th:href="@{/enterSoldGoods(uid=${session.user.uid})}">上架商品</a></li>
+        <li class="layui-nav-item" style=" margin: 0 5px 0 5px;"><a class="a" href="/enterShoppingCart">购物车</a></li>
     </ul>
-    <ul class="layui-nav  layui-layout-right layui-bg-blue">
-        <li class="layui-nav-item" style=" margin: 0 15px 0 15px;"><a class="a" href="javascript:" text="${user.uname}">***</a>
+    <ul class="layui-nav  layui-layout-right layui-bg-blue" style="height: 60px">
+        <img th:src="${session.user.uhead}" class="layui-nav-img" height="50px">
+        <li class="layui-nav-item" style=" margin: 0 5px 0 5px;">
+            <a class="a" href="javascript:" th:text="${session.user.uname}"></a>
             <dl class="layui-nav-child">
                 <dd><a href="/enterPersonal">个人信息</a></dd>
-                <dd><a href="">2</a></dd>
-                <dd><a href="/enterLogin">退出登录</a></dd>
-            </dl></li>
+                <dd><a href="">安全信息</a></dd>
+                <dd><a href="javascript:;" id="logOut">退出登录</a></dd>
+            </dl>
+        </li>
     </ul>
 </div>
 
-<div style="text-align: center; width: 100%; height: 80%;  z-index: 9;">
-    <div class="layui-card" style="margin: 20px auto; height: auto; width: 100%;">
-        <div class="layui-card-body" style="top: 50px; padding:10px 20px 15px 20px; margin: 20px; Font-size: 17px">
+<div style="text-align: center; width: 100%; height: 100%;  z-index: 9;">
+    <div class="layui-card" style="margin: 20px auto; height: 265px; width: 100%;">
+        <div class="layui-card-body" style="top: 50px; padding: 10px 20px 15px 20px; margin: 20px; Font-size: 17px; height: auto;">
             <form class="layui-form" action="" style="width: 100%; display: flex;">
                 <div class="layui-form-item" style="margin: auto; padding: 20px 0 20px 0">
                     <div class="layui-inline">
                         <label>
-                            <input type="text" name="" placeholder="What are you looking for?" style="font-size: 30px; padding: 20px 0; width: 400px; height: 30px; text-align: center;">
+                            <input type="text" id="input" placeholder="What are you looking for?" style="font-size: 30px; padding: 20px 0; width: 400px; height: 30px; text-align: center;">
                         </label>
                     </div>
                     <div class="layui-inline" style="font-size: 23px; width: 140px; line-height: 30px; text-align: center;">
                         <label>
-                            <select name="gType">
+                            <select id="gType">
                                 <option value="">全部分类</option>
                                 <option value="food">食品饮料</option>
                                 <option value="home">家居日用</option>
@@ -92,73 +80,304 @@
                         </label>
                     </div>
                     <div class="layui-inline">
-                        <button type="button" id="button" class="layui-btn layui-btn-lg layui-btn-radius">搜索</button>
+                        <button type="button" id="selectBtn" class="layui-btn layui-btn-lg layui-btn-normal layui-btn-radius">搜索商品</button>
                     </div>
                 </div>
             </form>
-            <button type="button" id="button2" class="layui-btn layui-btn-lg"><a href="/enterGoodList">查看全部商品</a></button>
+            <div class="layui-carousel" id="carousel" style="margin: auto auto 20px auto;">
+                <div carousel-item="">
+                    <div><img th:src="@{/img/carousel/carousel1.png}"></div>
+                    <div><img th:src="@{/img/carousel/carousel1.png}"></div>
+                    <div><img th:src="@{/img/carousel/carousel1.png}"></div>
+                    <div><img th:src="@{/img/carousel/carousel1.png}"></div>
+                    <div><img th:src="@{/img/carousel/carousel1.png}"></div>
+                    <div><img th:src="@{/img/carousel/carousel1.png}"></div>
+                    <div><img th:src="@{/img/carousel/carousel1.png}"></div>
+                </div>
+            </div>
+            <button type="button" id="allBtn" class="layui-btn layui-btn-lg layui-btn-normal layui-btn-radius">查看全部商品</button>
         </div>
     </div>
 </div>
 
-<div style="margin: 80px auto 40px auto; width: 70%;  z-index: 9; bottom:40px;">
+<div class="grid-demo"  style="margin: -50px 20px auto 20px; height: auto; width: 302px; text-align: center; float: right;">
+    <h2 id="date">当前日期</h2>
+    <h2 id="week">当前星期</h2>
+    <h2 id="time">当前时间</h2>
+    <div id="clock"></div>
+</div>
+
+<div style="margin: 520px auto 40px auto; width: 1212px;  z-index: 9; bottom:40px;">
     <div class="layui-row">
         <div class="layui-col-md9">
             <div class="grid-demo grid-demo-bg1" style="text-align: center; margin: auto; padding-top: 15px; height: auto; background-color: #cccccc;">
                 <label style="font-size: 30px;">推荐商品</label>
-                <div class="layui-fluid" id="LAY-component-grid-list" style="text-align: center; padding: 20px 20px 20px 20px;">
-                    <div id="card" class="layui-row layui-col-space10 demo-list">
+                <div class="layui-fluid" id="LAY-component-grid-list" style="text-align: center; padding: 20px 20px 20px 20px; width: 880px;">
+                    <div style="float: left; margin: auto; padding: 3px 0 8px 0;">
+                        <label style="font-size: 20px;">食品饮料 : </label>
+                        <button type="button" id="refresh1" class="layui-btn layui-btn-primary" style="font-size: 20px;" onclick="randomGoodslist1()">
+                            换一批
+                        </button>
+                    </div>
+                    <div id="card1" class="layui-row layui-col-space10 demo-list" style="padding-top: 20px">
+                    </div>
+                    <div style="float: left; margin: auto; padding: 3px 0 8px 0;">
+                        <label style="font-size: 20px;">家居日用 : </label>
+                        <button type="button" id="refresh2" class="layui-btn layui-btn-primary" style="font-size: 20px;" onclick="randomGoodslist2()">
+                            换一批
+                        </button>
+                    </div>
+                    <div id="card2" class="layui-row layui-col-space10 demo-list" style="padding-top: 20px">
+                    </div>
+                    <div style="float: left; margin: auto; padding: 3px 0 8px 0;">
+                        <label style="font-size: 20px;">交通出行 : </label>
+                        <button type="button" id="refresh3" class="layui-btn layui-btn-primary" style="font-size: 20px;" onclick="randomGoodslist3()">
+                            换一批
+                        </button>
+                    </div>
+                    <div id="card3" class="layui-row layui-col-space10 demo-list" style="padding-top: 20px">
+                    </div>
+                    <div style="float: left; margin: auto; padding: 3px 0 8px 0;">
+                        <label style="font-size: 20px;">电子数码 : </label>
+                        <button type="button" id="refresh4" class="layui-btn layui-btn-primary" style="font-size: 20px;" onclick="randomGoodslist4()">
+                            换一批
+                        </button>
+                    </div>
+                    <div id="card4" class="layui-row layui-col-space10 demo-list" style="padding-top: 20px">
+                    </div>
+                    <div style="float: left; margin: auto; padding: 3px 0 8px 0;">
+                        <label style="font-size: 20px;">文学资料 : </label>
+                        <button type="button" id="refresh5" class="layui-btn layui-btn-primary" style="font-size: 20px;" onclick="randomGoodslist5()">
+                            换一批
+                        </button>
+                    </div>
+                    <div id="card5" class="layui-row layui-col-space10 demo-list" style="padding-top: 20px">
+                    </div>
+                    <div style="float: left; margin: auto; padding: 3px 0 8px 0;">
+                        <label style="font-size: 20px;">其它 : </label>
+                        <button type="button" id="refresh6" class="layui-btn layui-btn-primary" style="font-size: 20px;" onclick="randomGoodslist6()">
+                            换一批
+                        </button>
+                    </div>
+                    <div id="card6" class="layui-row layui-col-space10 demo-list" style="padding-top: 20px">
                     </div>
                 </div>
             </div>
         </div>
         <div class="layui-col-md3">
-            <div class="grid-demo"  style="margin: auto; height: 200px; background-color: #FFB800;"></div>
+
         </div>
     </div>
 </div>
 
+<div class="layui-row layui-col-space10" style="padding: 30px 0 20px 0; display: flex; text-align: center; width: 100%; height: 50%; background-color: #2F4056;  z-index: 9;">
+    <div class="layui-col-md4">
+        <img th:src="@{/images/logo/logo.png}" alt="logo" style="height: 60px; padding: 0 0 20px 0">
+        <div class="text">
+            <p>Campus Shopping Platform（校园购物平台）. </p>
+        </div>
+    </div>
+    <div class="layui-col-md4">
+        <h3 class="title">联系我们</h3>
+        <ul class="text">
+            <li>
+                <i class="layui-icon layui-icon-email" style="font-size: 30px;"></i>
+                <a class="text" href="mailto:zcl_2233@163.com">zcl_2233@163.com</a>
+            </li>
+            <li>
+                <i class="layui-icon layui-icon-cellphone" style="font-size: 25px;"></i>
+                <a class="text" href="tel:+86-178-5692-8281">+86 178-5692-8281</a>
+            </li>
+        </ul>
+    </div>
+    <div class="layui-col-md4">
+        <h3 class="title">友情链接</h3>
+        <ul>
+            <li>
+                <a class="text" th:href="@{https://www.baidu.com/}">百度一下</a>
+            </li>
+            <li>
+                <a class="text" th:href="@{https://www.taobao.com/}">淘宝网</a>
+            </li>
+            <li>
+                <a class="text" th:href="@{https://www.jd.com/}">京东商城</a>
+            </li>
+            <li>
+                <a class="text" th:href="@{https://www.iflytek.com/}">科大讯飞</a>
+            </li>
+        </ul>
+    </div>
+</div>
+
 <!--底部信息栏-->
-<div style="display: flex; text-align: center; width: 100%; height: 40px; position: fixed; bottom:0; z-index: 10; background-color: white">
-    <p style="margin: auto">&nbsp;Copyright &nbsp; © 2020 &nbsp; 版权所属 &nbsp; Java2班14组</p>
+<div style="display: flex; text-align: center; width: 100%; height: 40px; z-index: 10; background-color: white">
+    <p style="margin: auto">&nbsp;Copyright &nbsp; © 2020 &nbsp; 版权所属 &nbsp; Java 2班 14组</p>
 </div>
 
 <script>
-    layui.use('element', function () {
+    layui.use(['carousel','element','jquery','form'], function () {
         const element = layui.element; //导航的hover效果、二级菜单等功能，需要依赖element模块
+        const layer = layui.layer;
         //监听导航点击
         element.on('nav(demo)', function (elem) {
             //console.log(elem)
             layer.msg(elem.text());
         });
+
+        const form = layui.form; //只有执行了这一步，部分表单元素才会自动修饰成功
+        //……
+        //但是，如果你的HTML是动态生成的，自动渲染就会失效
+        //因此你需要在相应的地方，执行下述方法来进行渲染
+        form.render();
+        //轮播
+        const carousel = layui.carousel;
+        carousel.render({
+            elem: '#carousel'
+            ,interval: 1800
+            ,anim: 'fade'
+            ,width: '800px'
+            ,height: '500px'
+        });
     });
 </script>
-
 <script>
-    function goodslist (){
+    //退出登录
+    $(document).ready(function () {
+        $("#logOut").click(function () {
+            $.ajax({
+                url: "logout",
+                type: "post",
+                success: function (result) {
+                    layer.confirm("您确定要退出吗？", {icon: 7, title: "提示"}, function (index) {
+                        window.location.href = "enterLogin";
+                        layer.close(index);
+                    });
+                }
+            });
+        });
+    });
+</script>
+<script>
+    var goodsdata;
+    function randomGoodslist1 (){
+        $("#card1").empty();
         $.ajax({
             cache: false,
             dataType: 'json',
             type: 'post',
-            url: "/RandomGoods",
+            url: "/RandomGoods?gType=food",
             success: function (result) {
                 //console.log(result);
+                goodsdata = result;
                 for (let i = 0; i < result.length; i++) {
-                    const mydiv = '<div class="layui-col-xs3"><div class="layui-card"><a><form style="height: 280px; width: 200px;"><!--img id="c_photo" src="../img/goods/' + '"style="height: 250px; width: 200px;"--><div style="font-size: 20px"><label style="float: left;">' + result[i].gName + '</label><label style="float: right;">￥' + result[i].gPrice + '</label></div></form></a></div></div>';
-                    $("#card").append(mydiv);
+                    const mydiv = '<div class="layui-col-md3" style="height: 300px; width: 220px;"><div class="layui-card"><a href="/enterDetails?gid='+ result[i].gId +'" style="cursor:pointer"><form style="height: 290px; width: 200px;"><img id="' + result[i].gId + '" src="' + result[i].gPicture + '" style="height: 250px; width: 210px;"><div style="font-size: 20px"><label style="float: left;">' + result[i].gName + '</label><label style="float: right;">￥' + result[i].gPrice + '</label></div></form></a></div></div>';
+                    $("#card1").append(mydiv);
+                }
+            }
+        });
+    }
+    function randomGoodslist2 (){
+        $("#card2").empty();
+        $.ajax({
+            cache: false,
+            dataType: 'json',
+            type: 'post',
+            url: "/RandomGoods?gType=home",
+            success: function (result) {
+                //console.log(result);
+                goodsdata = result;
+                for (let i = 0; i < result.length; i++) {
+                    const mydiv = '<div class="layui-col-md3" style="height: 300px; width: 220px;"><div class="layui-card"><a href="/enterDetails?gid='+ result[i].gId +'" style="cursor:pointer"><form style="height: 290px; width: 200px;"><img id="' + result[i].gId + '" src="' + result[i].gPicture + '" style="height: 250px; width: 210px;"><div style="font-size: 20px"><label style="float: left;">' + result[i].gName + '</label><label style="float: right;">￥' + result[i].gPrice + '</label></div></form></a></div></div>';
+                    $("#card2").append(mydiv);
+                }
+            }
+        });
+    }
+    function randomGoodslist3 (){
+        $("#card3").empty();
+        $.ajax({
+            cache: false,
+            dataType: 'json',
+            type: 'post',
+            url: "/RandomGoods?gType=travel",
+            success: function (result) {
+                //console.log(result);
+                goodsdata = result;
+                for (let i = 0; i < result.length; i++) {
+                    const mydiv = '<div class="layui-col-md3" style="height: 300px; width: 220px;"><div class="layui-card"><a href="/enterDetails?gid='+ result[i].gId +'" style="cursor:pointer"><form style="height: 290px; width: 200px;"><img id="' + result[i].gId + '" src="' + result[i].gPicture + '" style="height: 250px; width: 210px;"><div style="font-size: 20px"><label style="float: left;">' + result[i].gName + '</label><label style="float: right;">￥' + result[i].gPrice + '</label></div></form></a></div></div>';
+                    $("#card3").append(mydiv);
+                }
+            }
+        });
+    }
+    function randomGoodslist4 (){
+        $("#card4").empty();
+        $.ajax({
+            cache: false,
+            dataType: 'json',
+            type: 'post',
+            url: "/RandomGoods?gType=electronic",
+            success: function (result) {
+                //console.log(result);
+                goodsdata = result;
+                for (let i = 0; i < result.length; i++) {
+                    const mydiv = '<div class="layui-col-md3" style="height: 300px; width: 220px;"><div class="layui-card"><a href="/enterDetails?gid='+ result[i].gId +'" style="cursor:pointer"><form style="height: 290px; width: 200px;"><img id="' + result[i].gId + '" src="' + result[i].gPicture + '" style="height: 250px; width: 210px;"><div style="font-size: 20px"><label style="float: left;">' + result[i].gName + '</label><label style="float: right;">￥' + result[i].gPrice + '</label></div></form></a></div></div>';
+                    $("#card4").append(mydiv);
+                }
+            }
+        });
+    }
+    function randomGoodslist5 (){
+        $("#card5").empty();
+        $.ajax({
+            cache: false,
+            dataType: 'json',
+            type: 'post',
+            url: "/RandomGoods?gType=literature",
+            success: function (result) {
+                //console.log(result);
+                goodsdata = result;
+                for (let i = 0; i < result.length; i++) {
+                    const mydiv = '<div class="layui-col-md3" style="height: 300px; width: 220px;"><div class="layui-card"><a href="/enterDetails?gid='+ result[i].gId +'" style="cursor:pointer"><form style="height: 290px; width: 200px;"><img id="' + result[i].gId + '" src="' + result[i].gPicture + '" style="height: 250px; width: 210px;"><div style="font-size: 20px"><label style="float: left;">' + result[i].gName + '</label><label style="float: right;">￥' + result[i].gPrice + '</label></div></form></a></div></div>';
+                    $("#card5").append(mydiv);
+                }
+            }
+        });
+    }
+    function randomGoodslist6 (){
+        $("#card6").empty();
+        $.ajax({
+            cache: false,
+            dataType: 'json',
+            type: 'post',
+            url: "/RandomGoods?gType=other",
+            success: function (result) {
+                //console.log(result);
+                goodsdata = result;
+                for (let i = 0; i < result.length; i++) {
+                    const mydiv = '<div class="layui-col-md3" style="height: 300px; width: 220px;"><div class="layui-card"><a href="/enterDetails?gid='+ result[i].gId +'" style="cursor:pointer"><form style="height: 290px; width: 200px;"><img id="' + result[i].gId + '" src="' + result[i].gPicture + '" style="height: 250px; width: 210px;"><div style="font-size: 20px"><label style="float: left;">' + result[i].gName + '</label><label style="float: right;">￥' + result[i].gPrice + '</label></div></form></a></div></div>';
+                    $("#card6").append(mydiv);
                 }
             }
         });
     }
 </script>
 <script>
-    layui.use('form', function(){
-        const form = layui.form; //只有执行了这一步，部分表单元素才会自动修饰成功
-        //……
-        //但是，如果你的HTML是动态生成的，自动渲染就会失效
-        //因此你需要在相应的地方，执行下述方法来进行渲染
-        form.render();
+    $('#allBtn').click(function () {
+        window.open('enterGoodList','_self');
     });
+</script>
+<script type="text/javascript">
+    $(function(){
+        $('#clock').drawClock();
+    });
+</script>
+<script>
+    $('#selectBtn').click(function () {
+        const gName = $("#input").val();
+        const gType = $("select option:selected").val();
+        window.open('enterGoodSelect?gName='+gName+'&gType='+gType,'_self');
+        });
 </script>
 </body>
 </html>

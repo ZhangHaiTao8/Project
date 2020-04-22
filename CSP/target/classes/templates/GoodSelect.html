@@ -1,0 +1,417 @@
+<!DOCTYPE html>
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>商品列表 - 校园购</title>
+    <!-- Favicon icon -->
+    <link rel="shortcut icon" th:href="@{/images/favicon.ico}" type="image/x-icon">
+
+    <meta name="renderer" content="webkit">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+
+    <link rel="stylesheet" th:href="@{/layui/css/layui.css}" media="all">
+    <link rel="stylesheet" th:href="@{/css/zcl.css}" media="all">
+    <script th:src="@{/layui/layui.js}" charset="utf-8"></script>
+
+    <script th:src="@{/js/jquery-3.3.1.js}"></script>
+    <script th:src="@{/js/zcl.js}"></script>
+    <!-- 让IE8/9支持媒体查询，从而兼容栅格 -->
+    <!--[if lt IE 9]>
+    <script src="https://cdn.staticfile.org/html5shiv/r29/html5.min.js"></script>
+    <script src="https://cdn.staticfile.org/respond.js/1.4.2/respond.min.js"></script>
+    <![endif]-->
+
+</head>
+
+<body onload="selectgood1()">
+<!--顶部导航栏-->
+<div style="top: 0; position: fixed; width: 100%; z-index: 10;">
+    <ul class="layui-nav layui-bg-blue">
+        <li class="layui-nav-item"><a href="/enterHome"><img th:src="@{/images/logo/black-logo.png}" height="50px" alt="logo"></a></li>
+        <li class="layui-nav-item" style=" margin: 0 5px 0 5px;"><a class="a" href="">一</a></li>
+        <li class="layui-nav-item" style=" margin: 0 5px 0 5px;"><a class="a" href="">二</a></li>
+        <li class="layui-nav-item" style=" margin: 0 15px 0 15px;">
+            <a class="a" href="javascript:">三</a>
+            <dl class="layui-nav-child">
+                <dd><a href="">1</a></dd>
+                <dd><a href="">2</a></dd>
+                <dd><a href="">3</a></dd>
+            </dl>
+        </li>
+        <li class="layui-nav-item" style=" margin: 0 5px 0 5px;"><a class="a" th:href="@{/enterSoldGoods(uid=${session.user.uid})}">上架商品</a></li>
+        <li class="layui-nav-item" style=" margin: 0 5px 0 5px;"><a class="a" href="/enterShoppingCart">购物车</a></li>
+    </ul>
+    <ul class="layui-nav  layui-layout-right layui-bg-blue" style="height: 60px">
+        <img th:src="${session.user.uhead}" class="layui-nav-img" height="50px">
+        <li class="layui-nav-item" style=" margin: 0 5px 0 5px;">
+            <a class="a" href="javascript:" th:text="${session.user.uname}"></a>
+            <dl class="layui-nav-child">
+                <dd><a href="/enterPersonal">个人信息</a></dd>
+                <dd><a href="">安全信息</a></dd>
+                <dd><a href="javascript:;" id="logOut">退出登录</a></dd>
+            </dl>
+        </li>
+    </ul>
+</div>
+
+<div style="text-align: center; width: 100%; height: 80%;  z-index: 9;">
+    <div class="layui-card" style="margin: 20px auto; height: 185px; width: 100%;">
+        <div class="layui-card-body" style="top: 50px; padding:10px 20px 15px 20px; margin: 20px; Font-size: 17px">
+            <form class="layui-form" action="" style="width: 100%; display: flex;">
+                <div class="layui-form-item" style="margin: auto; padding: 20px 0 20px 0">
+                    <div class="layui-inline">
+                        <label>
+                            <input type="text" id="gName" name="gName" placeholder="What are you looking for?" style="font-size: 30px; padding: 20px 0; width: 400px; height: 30px; text-align: center;">
+                        </label>
+                    </div>
+                    <div class="layui-inline" style="font-size: 23px; width: 140px; line-height: 30px; text-align: center;">
+                        <select id="gType">
+                            <option value="">全部分类</option>
+                            <option value="food">食品饮料</option>
+                            <option value="home">家居日用</option>
+                            <option value="travel">交通出行</option>
+                            <option value="electronic">电子数码</option>
+                            <option value="literature">文学资料</option>
+                            <option value="other">&nbsp;其它&nbsp;</option>
+                        </select>
+                    </div>
+                    <div class="layui-inline">
+                        <button type="button" id="selectBtn" class="layui-btn layui-btn-lg layui-btn-normal layui-btn-radius" onclick="selectgood()">搜索商品</button>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+<div style="margin: 40px auto 40px auto; width: 1110px; z-index: 9; bottom:40px;">
+    <div class="grid-demo grid-demo-bg1" style="text-align: center; margin: auto; height: auto; background-color: #cccccc;">
+        <div class="layui-fluid" id="LAY-component-grid-list" style="text-align: center; padding: 20px 10px 10px 10px; width: 1100px;">
+            <div style="float: left; margin: auto; padding: 3px 0 8px 0;">
+                <label style="font-size: 20px;">排序方式 : </label>
+                <button type="button" id="default" class="layui-btn layui-btn-primary" style="font-size: 20px;">
+                    默认
+                </button>
+                <button type="button" id="sales" class="layui-btn layui-btn-primary" style="font-size: 20px;">
+                    销量
+                </button>
+                <button type="button" id="price" class="layui-btn layui-btn-primary" style="font-size: 20px;">
+                    价格
+                </button>
+            </div>
+            <div id="card" class="layui-row layui-col-space10 demo-list" style="text-align: center;">
+            </div>
+            <div id="pageBox"></div>
+        </div>
+    </div>
+</div>
+
+<!--底部信息栏-->
+<div style="display: flex; text-align: center; width: 100%; height: 40px; z-index: 10; background-color: white">
+    <p style="margin: auto">&nbsp;Copyright &nbsp; © 2020 &nbsp; 版权所属 &nbsp; Java 2班 14组</p>
+</div>
+
+<script th:src="@{/layui/layui.js}"></script>
+<script>
+    layui.use(['form','laypage', 'layer','element'], function () {
+        const element = layui.element; //导航的hover效果、二级菜单等功能，需要依赖element模块
+        const form = layui.form;
+        const laypage = layui.laypage, layer = layui.layer; //layui分页
+        //监听导航点击
+        element.on('nav(demo)', function (elem) {
+            //console.log(elem)
+            layer.msg(elem.text());
+        });
+
+        form.render();
+
+    });
+</script>
+
+<script>
+    function selectgood1 () {
+        const gName = getQueryVariable("gName");
+        const gType = getQueryVariable("gType");
+        const name = document.getElementById("gName");
+        //给input赋值
+        name.value = gName;
+        const type = gType;
+        //设置select选中
+        set_select_checked('gType', type);
+        $("#default").html('默认');
+        $("#sales").html('销量');
+        $("#price").html('价格');
+        //刷新select渲染
+        layui.form.render('select');
+        //console.log(gName,gType);
+        //查找商品
+        $.ajax({
+            cache: false,
+            dataType: 'json',
+            type: 'post',
+            url: "/selectGoods?gType="+gType+"&gName="+gName,
+            success: function (result) {
+                //console.log(result);
+                goodsdata = result;
+                layui.use('laypage', function(){
+                    const laypage = layui.laypage;
+                    //调用分页
+                    laypage.render({
+                        elem: 'pageBox'
+                        ,count: result.length
+                        ,theme: '#1E9FFF'
+                        ,prev: "<" //上一页
+                        ,next: ">" //下一页
+                        ,layout: ['count', 'prev', 'page', 'next', 'limit', 'skip']
+                        ,jump: function(obj){
+                            //模拟渲染
+                            document.getElementById('card').innerHTML = function(){
+                                var arr = [],thisData = result.concat().splice(obj.curr*obj.limit - obj.limit, obj.limit);
+                                layui.each(thisData, function(index, item){
+                                    arr.push('<div class="layui-col-md3" style="height: 300px; width: 220px;"><div class="layui-card"><a href="/enterDetails?gid='+ item.gId +'" style="cursor:pointer"><form style="height: 290px; width: 200px;"><img id="' + item.gId + '" src="' + item.gPicture + '" style="height: 250px; width: 210px;"><div style="font-size: 20px"><label style="float: left;">' + item.gName + '</label><label style="float: right;">￥' + item.gPrice + '</label></div></form></a></div></div>');
+                                });
+                                return arr.join('');
+                            }();
+                        }
+                    });
+                });
+            }
+        });
+    }
+</script>
+<script>
+    function selectgood (){
+        window.history.replaceState(null,null,'http://localhost:8080/enterGoodSelect');
+        $("#card").empty();
+
+        $("#default").html('默认');
+        $("#sales").html('销量');
+        $("#price").html('价格');
+
+        const gName = $("#gName").val();
+        const gType = $("#gType option:selected").val();
+
+        $.ajax({
+            cache: false,
+            dataType: 'json',
+            type: 'post',
+            url: "/selectGoods?gType="+gType+"&gName="+gName,
+            success: function (result) {
+                //console.log(result);
+                goodsdata = result;
+                layui.use('laypage', function(){
+                    const laypage = layui.laypage;
+                    //调用分页
+                    laypage.render({
+                        elem: 'pageBox'
+                        ,count: result.length
+                        ,theme: '#1E9FFF'
+                        ,prev: "<" //上一页
+                        ,next: ">" //下一页
+                        ,layout: ['count', 'prev', 'page', 'next', 'limit', 'skip']
+                        ,jump: function(obj){
+                            //模拟渲染
+                            document.getElementById('card').innerHTML = function(){
+                                var arr = [],thisData = result.concat().splice(obj.curr*obj.limit - obj.limit, obj.limit);
+                                layui.each(thisData, function(index, item){
+                                    arr.push('<div class="layui-col-md3" style="height: 300px; width: 220px;"><div class="layui-card"><a href="/enterDetails?gid='+ item.gId +'" style="cursor:pointer"><form style="height: 290px; width: 200px;"><img id="' + item.gId + '" src="' + item.gPicture + '" style="height: 250px; width: 210px;"><div style="font-size: 20px"><label style="float: left;">' + item.gName + '</label><label style="float: right;">￥' + item.gPrice + '</label></div></form></a></div></div>');
+                                });
+                                return arr.join('');
+                            }();
+                        }
+                    });
+                });
+            }
+        });
+    }
+</script>
+<script>
+    $('#default')
+        .dblclick(function () {
+            $("#default").html('默认:↑');
+            $("#sales").html('销量');
+            $("#price").html('价格');
+            $("#card").empty();
+            console.log(goodsdata);
+            goodsdata.sort(getSortFun('desc', 'gId'));
+            layui.use('laypage', function(){
+                const laypage = layui.laypage;
+                //调用分页
+                laypage.render({
+                    elem: 'pageBox'
+                    ,count: goodsdata.length
+                    ,theme: '#1E9FFF'
+                    ,prev: "<" //上一页
+                    ,next: ">" //下一页
+                    ,layout: ['count', 'prev', 'page', 'next', 'limit', 'skip']
+                    ,jump: function(obj){
+                        //模拟渲染
+                        document.getElementById('card').innerHTML = function(){
+                            var arr = [],thisData = goodsdata.concat().splice(obj.curr*obj.limit - obj.limit, obj.limit);
+                            layui.each(thisData, function(index, item){
+                                arr.push('<div class="layui-col-md3" style="height: 300px; width: 220px;"><div class="layui-card"><a href="/enterDetails?gid='+ item.gId +'" style="cursor:pointer"><form style="height: 290px; width: 200px;"><img id="' + item.gId + '" src="' + item.gPicture + '" style="height: 250px; width: 210px;"><div style="font-size: 20px"><label style="float: left;">' + item.gName + '</label><label style="float: right;">￥' + item.gPrice + '</label></div></form></a></div></div>');
+                            });
+                            return arr.join('');
+                        }();
+                    }
+                });
+            });
+        })
+        .click(function () {
+            $("#default").html('默认:↓');
+            $("#sales").html('销量');
+            $("#price").html('价格');
+            $("#card").empty();
+            console.log(goodsdata);
+            goodsdata.sort(getSortFun('asc', 'gId'));
+            layui.use('laypage', function(){
+                const laypage = layui.laypage;
+                //调用分页
+                laypage.render({
+                    elem: 'pageBox'
+                    ,count: goodsdata.length
+                    ,theme: '#1E9FFF'
+                    ,prev: "<" //上一页
+                    ,next: ">" //下一页
+                    ,layout: ['count', 'prev', 'page', 'next', 'limit', 'skip']
+                    ,jump: function(obj){
+                        //模拟渲染
+                        document.getElementById('card').innerHTML = function(){
+                            var arr = [],thisData = goodsdata.concat().splice(obj.curr*obj.limit - obj.limit, obj.limit);
+                            layui.each(thisData, function(index, item){
+                                arr.push('<div class="layui-col-md3" style="height: 300px; width: 220px;"><div class="layui-card"><a href="/enterDetails?gid='+ item.gId +'" style="cursor:pointer"><form style="height: 290px; width: 200px;"><img id="' + item.gId + '" src="' + item.gPicture + '" style="height: 250px; width: 210px;"><div style="font-size: 20px"><label style="float: left;">' + item.gName + '</label><label style="float: right;">￥' + item.gPrice + '</label></div></form></a></div></div>');
+                            });
+                            return arr.join('');
+                        }();
+                    }
+                });
+            });
+        });
+
+    $('#sales')
+        .dblclick(function () {
+            $("#default").html('默认');
+            $("#sales").html('销量:↑');
+            $("#price").html('价格');
+            $("#card").empty();
+            console.log(goodsdata);
+            goodsdata.sort(getSortFun('desc', 'gId'));
+            layui.use('laypage', function(){
+                const laypage = layui.laypage;
+                //调用分页
+                laypage.render({
+                    elem: 'pageBox'
+                    ,count: goodsdata.length
+                    ,theme: '#1E9FFF'
+                    ,prev: "<" //上一页
+                    ,next: ">" //下一页
+                    ,layout: ['count', 'prev', 'page', 'next', 'limit', 'skip']
+                    ,jump: function(obj){
+                        //模拟渲染
+                        document.getElementById('card').innerHTML = function(){
+                            var arr = [],thisData = goodsdata.concat().splice(obj.curr*obj.limit - obj.limit, obj.limit);
+                            layui.each(thisData, function(index, item){
+                                arr.push('<div class="layui-col-md3" style="height: 300px; width: 220px;"><div class="layui-card"><a href="/enterDetails?gid='+ item.gId +'" style="cursor:pointer"><form style="height: 290px; width: 200px;"><img id="' + item.gId + '" src="' + item.gPicture + '" style="height: 250px; width: 210px;"><div style="font-size: 20px"><label style="float: left;">' + item.gName + '</label><label style="float: right;">￥' + item.gPrice + '</label></div></form></a></div></div>');
+                            });
+                            return arr.join('');
+                        }();
+                    }
+                });
+            });
+        })
+        .click(function () {
+            $("#default").html('默认');
+            $("#sales").html('销量:↓');
+            $("#price").html('价格');
+            $("#card").empty();
+            console.log(goodsdata);
+            goodsdata.sort(getSortFun('asc', 'gId'));
+            layui.use('laypage', function(){
+                const laypage = layui.laypage;
+                //调用分页
+                laypage.render({
+                    elem: 'pageBox'
+                    ,count: goodsdata.length
+                    ,theme: '#1E9FFF'
+                    ,prev: "<" //上一页
+                    ,next: ">" //下一页
+                    ,layout: ['count', 'prev', 'page', 'next', 'limit', 'skip']
+                    ,jump: function(obj){
+                        //模拟渲染
+                        document.getElementById('card').innerHTML = function(){
+                            var arr = [],thisData = goodsdata.concat().splice(obj.curr*obj.limit - obj.limit, obj.limit);
+                            layui.each(thisData, function(index, item){
+                                arr.push('<div class="layui-col-md3" style="height: 300px; width: 220px;"><div class="layui-card"><a href="/enterDetails?gid='+ item.gId +'" style="cursor:pointer"><form style="height: 290px; width: 200px;"><img id="' + item.gId + '" src="' + item.gPicture + '" style="height: 250px; width: 210px;"><div style="font-size: 20px"><label style="float: left;">' + item.gName + '</label><label style="float: right;">￥' + item.gPrice + '</label></div></form></a></div></div>');
+                            });
+                            return arr.join('');
+                        }();
+                    }
+                });
+            });
+        });
+
+    $('#price')
+        .dblclick(function () {
+            $("#default").html('默认');
+            $("#sales").html('销量');
+            $("#price").html('价格:↑');
+            $("#card").empty();
+            console.log(goodsdata);
+            goodsdata.sort(getSortFun('desc', 'gPrice'));
+            layui.use('laypage', function(){
+                const laypage = layui.laypage;
+                //调用分页
+                laypage.render({
+                    elem: 'pageBox'
+                    ,count: goodsdata.length
+                    ,theme: '#1E9FFF'
+                    ,prev: "<" //上一页
+                    ,next: ">" //下一页
+                    ,layout: ['count', 'prev', 'page', 'next', 'limit', 'skip']
+                    ,jump: function(obj){
+                        //模拟渲染
+                        document.getElementById('card').innerHTML = function(){
+                            var arr = [],thisData = goodsdata.concat().splice(obj.curr*obj.limit - obj.limit, obj.limit);
+                            layui.each(thisData, function(index, item){
+                                arr.push('<div class="layui-col-md3" style="height: 300px; width: 220px;"><div class="layui-card"><a href="/enterDetails?gid='+ item.gId +'" style="cursor:pointer"><form style="height: 290px; width: 200px;"><img id="' + item.gId + '" src="' + item.gPicture + '" style="height: 250px; width: 210px;"><div style="font-size: 20px"><label style="float: left;">' + item.gName + '</label><label style="float: right;">￥' + item.gPrice + '</label></div></form></a></div></div>');
+                            });
+                            return arr.join('');
+                        }();
+                    }
+                });
+            });
+        })
+        .click(function () {
+            $("#default").html('默认');
+            $("#sales").html('销量');
+            $("#price").html('价格:↓');
+            $("#card").empty();
+            console.log(goodsdata);
+            goodsdata.sort(getSortFun('asc', 'gPrice'));
+            layui.use('laypage', function(){
+                const laypage = layui.laypage;
+                //调用分页
+                laypage.render({
+                    elem: 'pageBox'
+                    ,count: goodsdata.length
+                    ,theme: '#1E9FFF'
+                    ,prev: "<" //上一页
+                    ,next: ">" //下一页
+                    ,layout: ['count', 'prev', 'page', 'next', 'limit', 'skip']
+                    ,jump: function(obj){
+                        //模拟渲染
+                        document.getElementById('card').innerHTML = function(){
+                            var arr = [],thisData = goodsdata.concat().splice(obj.curr*obj.limit - obj.limit, obj.limit);
+                            layui.each(thisData, function(index, item){
+                                arr.push('<div class="layui-col-md3" style="height: 300px; width: 220px;"><div class="layui-card"><a href="/enterDetails?gid='+ item.gId +'" style="cursor:pointer"><form style="height: 290px; width: 200px;"><img id="' + item.gId + '" src="' + item.gPicture + '" style="height: 250px; width: 210px;"><div style="font-size: 20px"><label style="float: left;">' + item.gName + '</label><label style="float: right;">￥' + item.gPrice + '</label></div></form></a></div></div>');
+                            });
+                            return arr.join('');
+                        }();
+                    }
+                });
+            });
+        });
+</script>
+</body>
+</html>

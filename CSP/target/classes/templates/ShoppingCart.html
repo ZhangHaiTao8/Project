@@ -1,0 +1,264 @@
+<!DOCTYPE html>
+<!--引入约束-->
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
+<head>
+<meta charset="UTF-8">
+<title>购物车页面</title>
+<script th:src="@{/js/jquery-3.3.1.js}"></script>
+<!-- 引入样式 -->
+<link th:href="@{/bootstrap3/css/bootstrap.min.css}" th:rel="stylesheet">
+<script th:src="@{/bootstrap3/js/bootstrap.min.js}"></script>
+<!-- 引入layui -->
+<link th:rel="stylesheet" th:href="@{/layui/css/layui.css}">
+<style type="text/css">
+    a {
+        font-size: 34px;
+        color:#101f3d;
+        font-weight: bold;
+    }
+    .line {
+        width: 1px;
+        height: 12px;
+        background: #808080;
+        display: inline-block;
+        margin: 0 10px;
+        position: relative;
+        top: -5px
+    }
+    .h-label {
+        color:#666;
+        font-size: 20px;
+        position: relative;
+        top: -5px;
+    }
+    #rw1{
+        margin-top: 2%;
+    }
+    #rw2{
+        margin-top: 5%;
+    }
+    #rw3{
+        margin-top: 2%;
+    }
+
+    #rw4{
+        margin-top: 5%;
+    }
+</style>
+</head>
+<body>
+    <div class="header">
+        <input type="hidden" th:value="${cid}" id="goods_cid"/>
+        <input type="hidden" th:value="${gid}" id="goods_gid"/>
+    </div>
+    <div class="content">
+        <div class="container">
+            <div class="row" id="rw1">
+                <a href="javascript:;">校园购</a>
+                <span class="line"></span>
+                <span class="h-label">购物车</span>
+            </div>
+            <div class="row" id="rw2">
+                <div class="col-md-2 col-md-offset-10">
+                    <button type="button" class="btn btn-lg" id="clearCart">清空购物车</button>
+                </div>
+            </div>
+            <div class="row" id="rw3">
+                <table class="table table-hover table-bordered table-striped" id="bc_table">
+                    <thead>
+                    <tr class="tr1 layui-bg-green">
+                        <th width="10%">
+                            <input type="checkbox" id="check_all_goods" /><span>全选</span>
+                        </th>
+                        <th width="20%">图片</th>
+                        <th width="10%">商品名</th>
+                        <th width="10%">单价</th>
+                        <th width="15%">数量</th>
+                        <th width="15%">小计</th>
+                        <th width="20%">操作</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    </tbody>
+                </table>
+            </div>
+            <div class="row" id="rw4">
+                <div class="col-md-4">
+                    <h3 id="h">共计<span id="numtotal"></span>件，总计：￥<span id="totals"></span></h3>
+                </div>
+                <div class="col-md-2 col-md-offset-10">
+                    <button type="button" class="btn btn-info btn-lg" id="okOrder">提交订单</button>
+                </div>
+            </div>
+        </div>
+
+    </div>
+    <div class="footer"></div>
+    <!--<div id="app">-->
+        <!--{{message}}-->
+    <!--</div>-->
+
+    <!--<script th:src="@{/js/vue.js}"></script>-->
+    <!--<script>-->
+        <!--var app=new Vue({-->
+            <!--el:"#app",-->
+            <!--data:{-->
+                <!--message:"Hello Vue"-->
+
+            <!--}-->
+        <!--})-->
+    <!--</script>-->
+<script>
+ $(document).ready(function () {
+     //获取该商品的id
+     var cid=$("#goods_cid").val();
+     var gid=$("#goods_gid").val();
+    $.ajax({
+        url:"selectShoppingCart",
+        type:"post",
+        data:{"cid":cid,"gid":gid},
+        success:function (result) {
+            console.log(result.extend.shoppingCarts[0].gname);
+            var list=result.extend.shoppingCarts;
+            $.each(list,function (index, item) {
+                var checkBoxTh=$("<th><input type='checkbox' class='check_item_goods'/></th>").attr("checkid",item.gid);
+                var gpictureTh=$("<th></th>").append("<img src="+item.gpicture+" style='height:40%;width:40%;'>");
+                var gnameTh=$("<th></th>").append(item.gname);
+                var gpriceTh=$("<th></th>").append(item.gprice);
+                var bccountTh=$("<th></th>").append("<button type='button' id='sub' class='btn btn-info'>-</button>").append(" ")
+                    .append("<span id='countid'>"+item.bccount+"</span>").append(" ").append("<button type='button' id='add' class='btn btn-info'>+</button>");
+                var bctotal=$("<th></th>").append(item.bccount*item.gprice);
+                var btn_del=$("<button type='button'></button>").addClass("btn btn-danger del_btn")
+                    .append($("<span aria-hidden='true'></span>").addClass("glyphicon glyphicon-heart"))
+                    .append("	").append("删除").attr("scid",item.gid);
+                 var btnTh=$("<th></th>").append(btn_del);
+                 //btnTh.attr("scid",item.uid);
+                $("<tr></tr>").append(checkBoxTh)
+                    .append(gpictureTh).append(gnameTh)
+                    .append(gpriceTh).append(bccountTh)
+                    .append(bctotal).append(btnTh)
+                    .appendTo("#bc_table tbody");
+
+            });
+        }
+    });
+
+
+     //删除
+     $(document).on("click",".del_btn",function(){
+         var goodName=$(this).parents("tr").find("th:eq(2)").text();
+         var gid=$("#goods_gid").val();
+         var cid=$("#goods_cid").val();
+         var gid1=$(this).attr("scid");
+         if(confirm("确认删除【"+goodName+"】吗？")){
+             $.ajax({
+                 url:"deleteShoppingCart",
+                 type:"post",
+                 data:{"cid":cid,"gid":gid1},
+                 success:function(result){
+                     window.location.href="/enterShoppingCart?gid="+gid;
+                 }
+             });
+         }
+     });
+
+ });
+
+ //清空购物车
+ $(document).ready(function () {
+     var cid=$("#goods_cid").val();
+     var gid=$("#goods_gid").val();
+     $("#clearCart").click(function () {
+         if(confirm("确认清空购物车吗？")){
+             $.ajax({
+                 url:"deleteShoppingCartAll",
+                 type:"post",
+                 data:{"cid":cid},
+                 success:function (result) {
+                     if(result.code==100) {
+                             window.location.href = "/enterShoppingCart?gid=" + gid;
+                             layer.close(index);
+
+                     }
+                 }
+             });
+         }
+     });
+ });
+
+ //完成全选全不选
+ $(document).ready(function () {
+     $("#check_all_goods").click(function() {
+         //attr获取checked是unfinded；
+         //dom原生属性，attr获取自定义属性的值
+         //prop修改和读取dom原生属性的值
+         //$("this").prop("checked");
+         $(".check_item_goods").prop("checked",$(this).prop("checked"));
+     });
+ });
+ //check_item
+ $(document).on("click",".check_item_goods",function(){
+     //判断当前选择的元素是否选满
+     var flag=$(".check_item_goods:checked").length==$(".check_item_goods").length;
+     $("#check_all_goods").prop("checked",flag);
+     //计算总钱数
+      var money=$(this).parents("tr").find("th:eq(5)").text();
+     // var val = $(".check_item_goods").is(":checked");
+     // if(val==true){
+     //     $("#totals").append(money);
+     // }else {
+     //     $("#totals").empty();
+     // }
+     // var sum=0;
+     // var val = $(".check_item_goods").is(":checked");
+     // //alert($(".check_item_goods:checked").length);
+     // if(val==true){
+     //     alert(11);
+     //         for(var i=0;i<$(".check_item_goods:checked").length;i++) {
+     //
+     //             sum += money;
+     //             $("#totals").text(money);
+     //         }
+     //     }else if(val==false){
+     //            alert(555);
+     //         $("#totals").remove();
+     // }
+     //alert(i);
+ });
+
+ //计数
+ $(document).on("click","#add",function(){
+     var num = $(this).parent().children("span");
+     num.text(parseInt(num.text())+1);
+ });
+ $(document).on("click","#sub",function(){
+     var num = $(this).parent().children("span");
+     if(parseInt(num.text())) {
+         num.text(parseInt(num.text()) - 1);
+     }else{
+         num.text("0");
+     }
+ });
+
+ //点击按钮显示价钱
+ $(document).on("click",".check_item_goods",function(){
+
+     // alert(money);
+     // sum+=money;
+     // $("#totals").html(sum);
+     var num=0;
+     $(".check_item_goods").each(function(){
+         if(this.checked==true){
+             var money=$(this).parents("tr").find("th:eq(5)").text();
+             num-=money;
+             var v=$(this).parents("tr").find("th:eq(3)").text();
+             //alert(v);
+         }
+     });
+     num=Math.abs(num);
+     $("#totals").html(num);
+ });
+
+</script>
+</body>
+</html>

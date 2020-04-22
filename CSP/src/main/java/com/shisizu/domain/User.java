@@ -10,12 +10,12 @@ import lombok.Data;
 @Data
 public class User {
     private Integer uid;
-    private String uname;
-    private String upassword;
-    private String usex;
-    private String uphone;
-    private String uhead;
-    private String uemail;
+	private String uname;
+	private String upassword;
+	private String usex;
+	private String uphone;
+	private String uhead;
+	private String uemail;
 	public User(Integer uid, String uname, String upassword, String usex, String uphone, String uhead, String uemail) {
 		super();
 		this.uid = uid;

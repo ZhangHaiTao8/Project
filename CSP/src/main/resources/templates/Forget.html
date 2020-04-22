@@ -1,0 +1,163 @@
+<!DOCTYPE html>
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>忘记密码</title>
+    <script th:src="@{/js/jquery-3.3.1.js}"></script>
+    <!-- 引入样式 -->
+    <link th:href="@{/bootstrap3/css/bootstrap.min.css}" th:rel="stylesheet">
+    <script th:src="@{/bootstrap3/js/bootstrap.min.js}"></script>
+    <!-- 引入layui -->
+    <link th:rel="stylesheet" th:href="@{/layui/css/layui.css}">
+    <style type="text/css">
+        .logo a {
+            font-size: 34px;
+            color:#101f3d;
+            font-weight: bold;
+        }
+        .logo .line {
+            width: 1px;
+            height: 12px;
+            background: #808080;
+            display: inline-block;
+            margin: 0 10px;
+            position: relative;
+            top: -5px
+        }
+        .h-label {
+            color:#666;
+            font-size: 20px;
+            position: relative;
+            top: -5px;
+        }
+        .forget_form{
+            height: 400px;
+            width: 400px;
+            padding-left: 50px;
+        }
+        #rd3{
+            margin:4% 35%;
+            height: 480px;
+            width: 450px;
+            border: 1px whitesmoke solid;
+            background-color: #eeeeee;
+            }
+    </style>
+</head>
+<body>
+    <div id="app">
+        <div class="header">
+            <div class="container">
+                <div class="logo">
+                    <a href="enterLogin">校园购</a>
+                    <span class="line"></span>
+                    <span class="h-label">找回密码</span>
+                </div>
+                <div class="clearfix"></div>
+            </div>
+        </div>
+        <div class="layui-anim layui-anim-upbit" id="rd3">
+            <div style="position: relative">
+                <div class="forget-main" style="margin-top: 50px">
+                    <form class="forget_form" id="userRegister_form">
+                        <!-- 标题 -->
+                        <div class="form-group" id="forget-h3">
+                            <h3 class="text-info" align="center">用户密码查找</h3>
+                        </div>
+                        <div class="form-group" id="group1">
+                            <label><span class="glyphicon glyphicon-envelope"></span> 邮箱</label>
+                            <input type="text" class="form-control" id="inputEmail" placeholder="请输入注册时邮箱" name="uemail">
+                            <span class="help-block" id="block1"></span>
+                        </div>
+                        <div class="form-group" id="group2">
+                            <label><span class="glyphicon glyphicon-lock"></span> 新密码</label>
+                            <input type="password" class="form-control" id="inputPassword1" placeholder="请设置新密码" name="upassword1">
+                            <span class="help-block" id="block2"></span>
+                        </div>
+                        <div class="form-group" id="group3">
+                            <label><span class="glyphicon glyphicon-lock"></span> 确认密码</label>
+                            <input type="password" class="form-control" id="inputPassword2" placeholder="请再输一次新密码" name="upassword2">
+                            <span class="help-block" id="block3"></span>
+                        </div>
+                        <div class="form-group">
+                            <a href="javascript:;" class="layui-btn layui-btn-normal btn-block" id="userForget">点击修改</a>
+                        </div>
+                        <!-- 返回登录 -->
+                        <div class="form-group">
+                            <a href="enterLogin" class="layui-btn btn-block" id="toLogin">返回登录</a>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+
+        <!--&lt;!&ndash; 注册界面 &ndash;&gt;-->
+        <!--<div class="layui-anim layui-anim-scale" id="rd" style="/* border: white solid; */background:rgba(200,200,200,0.6);">-->
+            <!--&lt;!&ndash; 表单 &ndash;&gt;-->
+      <!---->
+        <!--</div>-->
+
+
+    </div>
+
+<script th:src="@{/layui/layui.js}"></script>
+<script>
+//JavaScript代码区域
+layui.use(['element','form','jquery','layui'], function(){
+    var element = layui.element;
+    var form=layui.form;
+    var $=layui.$;
+    var layer=layui.layer;
+    });
+
+$(document).ready(function(){
+    //清空样式
+    $("#inputEmail").click(function () {
+        $('#inputEmail').next("span").text("");
+    });
+    $("#inputPassword1,#inputPassword2").click(function () {
+        $('#inputPassword2').next("span").text("");
+    });
+    $("#userForget").click(function () {
+        //1.获取用户输入的信息
+        var email = $("#inputEmail").val();
+        var password1 = $("#inputPassword1").val();
+        var password2 = $("#inputPassword2").val();
+
+        //判断两次密码是否一致
+        if(!password_pd(password1,password2)){
+            return false;
+        }
+
+        $.ajax({
+            url:"codeUpdate",
+            type:"post",
+            data:{"uemail":email,"upassword2":password2},
+            success:function(result){
+                if(result.code==100){
+                    layer.alert("密码已修改成功",{icon:1,title:"提示"},function(index){
+                        window.location.href="enterMain";
+                        layer.close(index);
+                    });
+                }else if(result.code==200){
+                    $('#inputEmail').next("span").text("邮箱输入错误").css("color","red");
+                    $("#inputEmail").val("");
+                }
+            }
+        })
+    });
+});
+
+//判断两次密码是否一致
+function password_pd(password1,password2) {
+    if(password1==password2){
+        return true;
+    }else{
+        $('#inputPassword2').next("span").text("密码不一致").css("color","red");
+        return false;
+    }
+}
+</script>
+
+</body>
+</html>

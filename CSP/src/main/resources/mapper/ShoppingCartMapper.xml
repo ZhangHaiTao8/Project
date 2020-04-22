@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Config 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.shisizu.dao.ShoppingCartDao">
+	<select id="selectShoppingCart" resultType="com.shisizu.domain.ShoppingCart">
+        select gPicture,gName,gPrice,bcCount,buycart.uID,goods.gid
+		from goods,buycart
+		where buycart.gid=goods.gid and buycart.uID=#{cid} and goods.gid
+    </select>
+	<!--select gPicture,gName,gPrice,bcCount,buycart.uID
+		from goods,buycart
+		where buycart.gid=goods.gid and buycart.uID=2-->
+	<insert id="addShoppingCart" parameterType="java.lang.Integer">
+		insert
+		into buycart(gid,uid)
+		values(#{gid},#{cid})
+	</insert>
+	<delete id="deleteShoppingCart" parameterType="java.lang.Integer">
+		delete from buycart where uid=#{cid} and gid=#{gid}
+	</delete>
+	<delete id="deleteShoppingCartAll" parameterType="java.lang.Integer">
+		delete from buycart where uid=#{cid}
+	</delete>
+</mapper>

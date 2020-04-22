@@ -1,0 +1,176 @@
+<!DOCTYPE html>
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>商品管理</title>
+    <script th:src="@{/js/jquery-3.3.1.js}"></script>
+    <!-- 引入样式 -->
+    <link th:href="@{/bootstrap3/css/bootstrap.min.css}" th:rel="stylesheet">
+    <script th:src="@{/bootstrap3/js/bootstrap.min.js}"></script>
+    <!-- 引入layui -->
+    <link th:rel="stylesheet" th:href="@{/layui/css/layui.css}">
+</head>
+<body>
+    <div class="header">
+        这是头
+        <input type="hidden" th:value="${gid}" id="goods_gid"/>
+        <input type="hidden" th:value="${cid}" id="goods_cid"/>
+    </div>
+    <div class="content">
+        <div class="container">
+            <div class="row" style="margin-top: 3%">
+                <h3>商品管理页面</h3>
+            </div>
+            <div class="row" style="margin-top: 5%">
+                <div class="col-md-4 col-md-offset-1" id="goodspicture">
+                    <!--<img th:src="" class="img-rounded" style="width: 300px;height: 300px;" id="listpicture">-->
+                </div>
+                <div class="col-md-4 col-md-offset-1" style="border: #eeeeee 1px solid">
+                    <form class="form-horizontal" id="updateForm">
+                        <div class="form-group">
+                            <label class="col-md-3  control-label" >商品名：</label>
+                            <div class="col-md-9">
+                                <span class="col-md-4 control-label ibase" style="display: inline;" id="listname"></span>
+                                <input type="text" name="gname" class="form-control base" id="ilistname" style="display: none;" value="">
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="col-md-3  control-label">库存：</label>
+                            <div class="col-md-9">
+                                <span class="col-md-4 control-label ibase" id="listcount" style="display: inline;"></span>
+                                <input type="text" name="gcount" class="form-control base" id="ilistcount" style="display: none;" value="">
+
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="col-md-3  control-label">单价：</label>
+                            <div class="col-md-9">
+                                <span class="col-md-4 control-label ibase" id="listprice" style="display: inline;">￥</span>
+                                <input type="text" name="gprice" class="form-control base" id="ilistprice" style="display: none;" value="">
+
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="col-md-3  control-label">分类：</label>
+                            <div class="col-md-9">
+                                <span class="col-md-4 control-label ibase" id="listtype" style="display: inline;"></span>
+                                <select class="form-control base" id="ilisttype" name="gtype" style="display: none;">
+                                </select>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="col-md-3  control-label">描述：</label>
+                            <div class="col-md-9">
+                                <textarea class="form-control ibase" rows="3" id="listdetails" disabled></textarea>
+                                <textarea class="form-control base" rows="3" id="ilistdetails" name="gdetails" style="display: none;"></textarea>
+                            </div>
+                        </div>
+                        <br>
+                        <div class="form-group">
+                            <div class="col-md-6">
+                                <button type="button" class="col-md-8 btn btn-danger ibase" id="updateShoppingCart" style="display: inline;">修改信息</button>
+                            </div>
+                            <div class="col-md-6">
+                                <button type="button" class="col-md-8 btn btn-danger ibase" id="deleteShoppingCart" style="display: inline;">下架商品</button>
+                            </div>
+                            <div class="col-md-6">
+                                <button type="button" class="col-md-8 btn btn-info base" id="okShoppingCart" style="display: none;">确定修改</button>
+                            </div>
+                            <div class="col-md-6">
+                                <button type="button" class="col-md-8 btn btn-info base" id="returnShoppingCart" style="display: none;">返回</button>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="footer" style="width: 100%; position: static; left: 0px; bottom: 0px;">
+        <p align="center" style="padding-top: 180px;line-height: 60px;color:#4d47d0;margin: 0px">Copyright © 2019-2020.(V1.0)安信工校园购</p>
+    </div>
+<script th:src="@{/layui/layui.js}"></script>
+<script>
+//JavaScript代码区域
+layui.use(['element','form','jquery','layui'], function(){
+    var element = layui.element;
+    var form=layui.form;
+    var $=layui.$;
+    var layer=layui.layer;
+});
+$(document).ready(function () {
+    $("#updateShoppingCart").click(function () {
+        $(".base").show();
+        $(".ibase").hide();
+    });
+
+    $("#okShoppingCart,#returnShoppingCart").click(function () {
+        $(".ibase").show();
+        $(".base").hide();
+    });
+});
+$(document).ready(function () {
+    //获取商品id
+    var gid = $("#goods_gid").val();
+    var cid = $("#goods_cid").val();
+
+    $.ajax({
+        url: "getOneGoods",
+        type: "post",
+        data: "gid=" + gid,
+        success: function (result) {
+            var goods = result.extend.goods;
+            $("#listname").append(goods.gname);
+            $("#listcount").append(goods.gcount);
+            $("#listprice").append(goods.gprice);
+            $("#listtype").append(goods.gtype);
+            $("#listdetails").append(goods.gdetails);
+            $("#listpicture").append(goods.gpicture);
+            $("#goodspicture").append("<img src=" + goods.gpicture + " style='height:90%;width:90%;'>")
+                .addClass("img-thumbnail");
+
+            $("#ilistname").val(goods.gname);
+            $("#ilistcount").val(goods.gcount);
+            $("#ilistprice").val(goods.gprice);
+            $("#ilisttype").prepend("<option>"+goods.gtype+"</option>")
+                            .append("<option>电脑</option>").append("<option>手机</option>");
+            $("#ilistdetails").append(goods.gdetails);
+        }
+    });
+
+    //点击确认修改
+    $("#okShoppingCart").click(function () {
+        $.ajax({
+            url:"updateOneGoods?gid="+gid,
+            type:"post",
+            data:$("#updateForm").serialize(),
+            success:function (result) {
+                if(result.code==100){
+                    layer.alert("修改成功", {icon: 1}, function (index) {
+                        window.location.href="/enterDetails?gid="+gid;
+                        layer.close(index);
+                    });
+                }
+            }
+        });
+    });
+
+    //点击下架商品
+    $("#deleteShoppingCart").click(function () {
+        $.ajax({
+            url:"deleteOneGoods",
+            type:"post",
+            data:{"gid":gid},
+            success:function (result) {
+                if(result.code==100){
+                    layer.confirm("您确定要下架吗", {icon: 5}, function (index) {
+                        window.location.href="/enterHome"
+                        layer.close(index);
+                    });
+                }
+            }
+        });
+    });
+});
+</script>
+</body>
+</html>

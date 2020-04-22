@@ -16,8 +16,8 @@ public class App {
 
         SpringApplication.run(App.class,args);
 
+        //启动项目自动打开系统默认浏览器并进入index界面
         Logger logger = LoggerFactory.getLogger(App.class);
-
         String cmd = "cmd /c start http://localhost:8080/enterIndex";
         Runtime run = Runtime.getRuntime();
         try{
